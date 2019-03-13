@@ -1,3 +1,41 @@
-.input {
-  border: 1px solid springgreen;
+.show {
+  animation: show-item 2s ease-in forwards;
+}
+
+.hide {
+  animation: hide-item 2s ease-in forwards;
+}
+
+@keyframes hide-item {
+  0% {
+    opacity: 1;
+    color: red;
+  }
+
+  50% {
+    opacity: .5;
+    color: yellow;
+  }
+
+  100% {
+    opacity: 0;
+    color: blue;
+  }
+}
+
+@keyframes show-item {
+  0% {
+    opacity: 0;
+    color: blue;
+  }
+
+  50% {
+    opacity: .5;
+    color: yellow;
+  }
+
+  100% {
+    opacity: 1;
+    color: red;
+  }
 }
