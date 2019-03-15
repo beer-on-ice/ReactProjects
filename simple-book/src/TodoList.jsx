@@ -5,8 +5,7 @@ import {
   getInputChangeAction,
   getAddItemAction,
   getDeleteItemAction,
-  // initListAction,
-  getTodoList
+  getInitList
 } from './store/actionCreator'
 import TodoListUI from './TodoListUI'
 import Mock from 'mockjs'
@@ -38,22 +37,10 @@ class TodoList extends Component {
     )
   }
   componentDidMount() {
-    const action = getTodoList()
+    const action = getInitList()
     store.dispatch(action)
-    // axios
-    //   .get('/list.json')
-    //   .then(res => {
-    //     const action = initListAction(res.data)
-    //     store.dispatch(action)
-    //     console.log(res)
-    //   })
-    //   .catch(() => {})
   }
   handleInputChange(e) {
-    // const action = {
-    //   type: CHANGE_INPUT_VALUE,
-    //   value: e.target.value
-    // }
     const action = getInputChangeAction(e.target.value)
     store.dispatch(action)
   }
