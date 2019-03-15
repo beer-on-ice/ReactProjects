@@ -1,12 +1,17 @@
 import React, { Component } from 'react'
 import 'antd/dist/antd.css'
-import { Input, Button, List } from 'antd'
 import store from './store'
 import {
   getInputChangeAction,
   getAddItemAction,
-  getDeleteItemAction
+  getDeleteItemAction,
+  // initListAction,
+  getTodoList
 } from './store/actionCreator'
+import TodoListUI from './TodoListUI'
+import Mock from 'mockjs'
+
+const data = [1, 2, 3, 4]
 
 class TodoList extends Component {
   constructor(props) {
@@ -15,33 +20,34 @@ class TodoList extends Component {
     this.handleInputChange = this.handleInputChange.bind(this)
     this.handleButtonClick = this.handleButtonClick.bind(this)
     this.handleStoreChange = this.handleStoreChange.bind(this)
+    this.handleItemDelete = this.handleItemDelete.bind(this)
     store.subscribe(this.handleStoreChange)
+  }
+  componentWillMount() {
+    Mock.mock('/list.json', data)
   }
   render() {
     return (
-      <div style={{ margin: '10px' }}>
-        <Input
-          placeholder="todo info"
-          style={{ width: '300px', marginRight: '10px' }}
-          value={this.state.inputValue}
-          onChange={this.handleInputChange}
-        />
-        <Button type="primary" onClick={this.handleButtonClick}>
-          提交
-        </Button>
-        <List
-          style={{ width: '300px', marginTop: '10px' }}
-          size="small"
-          bordered
-          dataSource={this.state.list}
-          renderItem={(item, index) => (
-            <List.Item onClick={this.handleItemDelete.bind(this, index)}>
-              {item}
-            </List.Item>
-          )}
-        />
-      </div>
+      <TodoListUI
+        inputValue={this.state.inputValue}
+        list={this.state.list}
+        handleInputChange={this.handleInputChange}
+        handleButtonClick={this.handleButtonClick}
+        handleItemDelete={this.handleItemDelete}
+      />
     )
+  }
+  componentDidMount() {
+    const action = getTodoList()
+    store.dispatch(action)
+    // axios
+    //   .get('/list.json')
+    //   .then(res => {
+    //     const action = initListAction(res.data)
+    //     store.dispatch(action)
+    //     console.log(res)
+    //   })
+    //   .catch(() => {})
   }
   handleInputChange(e) {
     // const action = {
@@ -55,18 +61,10 @@ class TodoList extends Component {
     this.setState(store.getState())
   }
   handleButtonClick() {
-    // const action = {
-    //   type: ADD_TODO_ITEM,
-    //   value: this.state.inputValue
-    // }
     const action = getAddItemAction()
     store.dispatch(action)
   }
   handleItemDelete(index) {
-    // const action = {
-    //   type: DELETE_TODO_ITEM,
-    //   index: index
-    // }
     const action = getDeleteItemAction(index)
     store.dispatch(action)
   }
