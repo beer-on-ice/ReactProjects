@@ -2,7 +2,7 @@ import React, { Fragment } from 'react'
 import ReactDOM from 'react-dom'
 
 import App from './App'
-import { GlobalReset } from './reset'
+import { GlobalReset } from './statics/styles/reset'
 import { GlobalIconFont } from './statics/iconfont/iconfont'
 
 ReactDOM.render(
