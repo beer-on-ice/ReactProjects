@@ -1,0 +1,7 @@
+{
+  "success": true,
+  "data": {
+    "title": "哈佛大学推荐20个快乐习惯（改变了百万人）",
+    "content": "<img alt=\"\" src=\"https://upload-images.jianshu.io/upload_images/16450642-435fe061c1890e20.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/554/format/webp\"/><p>可以通过在 React 组件构的造函数中设置 this.state 来初始化state。this.state 应该被视为一个组件的私有属性。我们在 this.state中存储当前每个方格（Square）的值，并且在每次方格被点击的时候改变这个值。现在，我们来修改一下Square 组件的 render方法，这样，每当方格被点击的时候，就可以显示当前 state 的值了：</p><p>在 Square 组件 render 方法中的 onCLick 事件监听函数中调Square 组件。组件更新之后，Square 组件的 this.state.value 的值会变为，因此，我们在游戏棋盘上就能看见 X 了。点击任意一个方格，X就会出现了。</p>"
+  }
+}

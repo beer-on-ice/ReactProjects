@@ -1,15 +1,17 @@
 import React, { Component } from 'react'
-import axios from 'axios'
 import { connect } from 'react-redux'
 
-import { HomeWrapper, HomeLeft, HomeRight } from './style'
+import { HomeWrapper, HomeLeft, HomeRight, BackTop } from './style'
 import Topic from './components/Topic'
 import Recommend from './components/Recommend'
 import Writter from './components/Writter'
 import List from './components/List'
 
+import { actionCreators } from './store'
+
 class Home extends Component {
   render() {
+    const { showScrollTop } = this.props
     return (
       <HomeWrapper className="clearfix">
         <HomeLeft>
@@ -25,33 +27,43 @@ class Home extends Component {
           <Recommend />
           <Writter />
         </HomeRight>
+        {showScrollTop ? (
+          <BackTop onClick={this.handleScrollTop}>回到顶部</BackTop>
+        ) : null}
       </HomeWrapper>
     )
   }
   componentDidMount() {
-    axios
-      .get('/api/home.json')
-      .then(res => {
-        const data = res.data.data
-        const action = {
-          type: 'home/change_home_data',
-          topicList: data.topicList,
-          articleList: data.articleList,
-          RecommendList: data.RecommendList
-        }
-        this.props.changeHomeData(action)
-      })
-      .catch(err => console.log(err))
+    this.props.changeHomeData()
+    this.bindEvents()
+  }
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.props.changeScrollTopShow)
+  }
+  bindEvents() {
+    window.addEventListener('scroll', this.props.changeScrollTopShow)
+  }
+  handleScrollTop() {
+    window.scrollTo(0, 0)
   }
 }
 
+const mapState = state => ({
+  showScrollTop: state.getIn(['home', 'showScrollTop'])
+})
+
 const mapDispatch = dispatch => ({
-  changeHomeData(action) {
-    dispatch(action)
+  changeHomeData() {
+    dispatch(actionCreators.getHomeInfo())
+  },
+  changeScrollTopShow() {
+    document.documentElement.scrollTop > 400
+      ? dispatch(actionCreators.toggleScrollTop(true))
+      : dispatch(actionCreators.toggleScrollTop(false))
   }
 })
 
 export default connect(
-  null,
+  mapState,
   mapDispatch
 )(Home)

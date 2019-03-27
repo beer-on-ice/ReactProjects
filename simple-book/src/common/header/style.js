@@ -1,10 +1,11 @@
 import styled from 'styled-components'
-import logoPic from '../../statics/logo.png'
+import logoPic from '../../statics/images/logo.png'
 
 export const HeaderWrapper = styled.div`
   height: 58px;
   border-bottom: 1px solid #f0f0f0;
   position: relative;
+  z-index: 1;
 `
 
 export const Logo = styled.a.attrs({
