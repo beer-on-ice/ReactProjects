@@ -32,9 +32,7 @@ class Header extends Component {
 
     return (
       <HeaderWrapper>
-        <Link to="/">
-          <Logo />
-        </Link>
+        <Logo />
         <Nav>
           <NavItem className="left active">首页</NavItem>
           <NavItem className="left">下载APP</NavItem>
