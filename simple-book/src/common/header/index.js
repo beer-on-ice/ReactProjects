@@ -4,6 +4,7 @@ import { CSSTransition } from 'react-transition-group'
 import { Link } from 'react-router-dom'
 
 import { actionCreators } from './store'
+import { actionCreators as loginActionCreators } from './../../pages/login/store'
 import {
   HeaderWrapper,
   Logo,
@@ -27,7 +28,8 @@ class Header extends Component {
       handleInputFocus,
       handleInputBlur,
       list,
-      login
+      login,
+      logout
     } = this.props
 
     return (
@@ -37,7 +39,9 @@ class Header extends Component {
           <NavItem className="left active">首页</NavItem>
           <NavItem className="left">下载APP</NavItem>
           {login ? (
-            <NavItem className="right">退出</NavItem>
+            <NavItem className="right" onClick={logout}>
+              退出
+            </NavItem>
           ) : (
             <Link to="/login">
               <NavItem className="right">登录</NavItem>
@@ -61,10 +65,12 @@ class Header extends Component {
           </NavSearchWrapper>
         </Nav>
         <Addition>
-          <Btn className="writing">
-            <i className="iconfont">&#xe615;</i>
-            写文章
-          </Btn>
+          <Link to="/write">
+            <Btn className="writing">
+              <i className="iconfont">&#xe615;</i>
+              写文章
+            </Btn>
+          </Link>
           <Btn className="reg">注册</Btn>
         </Addition>
       </HeaderWrapper>
@@ -163,6 +169,9 @@ const mapDispatchToProps = dispatch => {
       } else {
         dispatch(actionCreators.changePage(1))
       }
+    },
+    logout() {
+      dispatch(loginActionCreators.logout())
     }
   }
 }
