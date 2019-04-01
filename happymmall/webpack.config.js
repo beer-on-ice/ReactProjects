@@ -65,6 +65,12 @@ module.exports = {
       }
     ]
   },
+  resolve: {
+    alias: {
+      page: resolve(__dirname, 'src/page'),
+      component: resolve(__dirname, 'src/component')
+    }
+  },
   plugins: [
     // 处理html文件
     new HtmlWebpackPlugin({
@@ -86,6 +92,9 @@ module.exports = {
   ],
   devServer: {
     port: 8081,
-    overlay: true
+    overlay: true,
+    historyApiFallback: {
+      index: '/dist/index.html'
+    }
   }
 }
