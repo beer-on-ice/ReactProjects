@@ -4,8 +4,7 @@ import {
   BrowserRouter as Router,
   Redirect,
   Switch,
-  Route,
-  Link
+  Route
 } from 'react-router-dom'
 
 import Layout from 'component/layout/index.jsx'
@@ -19,7 +18,9 @@ class App extends React.Component {
         <Layout>
           <Switch>
             <Route exact path="/" component={Home} />
-            <Redirect from="*" to="/" />
+            <Route exact path="/product" component={Home} />
+            <Route exact path="/product-category" component={Home} />
+            <Route exact path="/order" component={Home} />
           </Switch>
         </Layout>
       </Router>
