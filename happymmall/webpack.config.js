@@ -68,7 +68,9 @@ module.exports = {
   resolve: {
     alias: {
       page: resolve(__dirname, 'src/page'),
-      component: resolve(__dirname, 'src/component')
+      component: resolve(__dirname, 'src/component'),
+      util: resolve(__dirname, 'src/util'),
+      service: resolve(__dirname, 'src/service')
     }
   },
   plugins: [
@@ -95,6 +97,12 @@ module.exports = {
     overlay: true,
     historyApiFallback: {
       index: '/dist/index.html'
+    },
+    proxy: {
+      '/manage': {
+        target: 'http://admintest.happymmall.com',
+        changeOrigin: true
+      }
     }
   }
 }
