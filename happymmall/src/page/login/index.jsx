@@ -16,6 +16,9 @@ class Login extends Component {
       redirect: _mm.getUrlParam('redirect') || '/'
     }
   }
+  componentWillMount() {
+    document.title = '登录 - MMALL ADMIN'
+  }
   handleInputChange(e) {
     let inputName = e.target.name,
       inputVal = e.target.value
@@ -24,20 +27,32 @@ class Login extends Component {
       [inputName]: inputVal
     })
   }
+  handleInputKeyUp(e) {
+    if (e.keyCode === 13) {
+      this.handleSubmit()
+    }
+  }
   handleSubmit() {
     let loginInfo = {
       username: this.state.username,
       password: this.state.password
     }
-    _user.login(loginInfo).then(
-      res => {
-        this.props.history.push(this.state.redirect)
-      },
-      err => {
-        _mm.errorTips(err)
-      }
-    )
+    let checkResult = _user.checkUserInfo(loginInfo)
+    if (checkResult.status) {
+      _user.login(loginInfo).then(
+        res => {
+          _mm.setStorage('userInfo', res)
+          this.props.history.push(this.state.redirect)
+        },
+        err => {
+          _mm.errorTips(err)
+        }
+      )
+    } else {
+      _mm.errorTips(checkResult.msg)
+    }
   }
+
   render() {
     return (
       <div className="col-md-4 col-md-offset-4">
@@ -51,6 +66,7 @@ class Login extends Component {
                   name="username"
                   className="form-control"
                   placeholder="请输入用户名"
+                  onKeyUp={e => this.handleInputKeyUp(e)}
                   onChange={e => this.handleInputChange(e)}
                 />
               </div>
@@ -60,6 +76,7 @@ class Login extends Component {
                   name="password"
                   className="form-control"
                   placeholder="请输入密码"
+                  onKeyUp={e => this.handleInputKeyUp(e)}
                   onChange={e => this.handleInputChange(e)}
                 />
               </div>

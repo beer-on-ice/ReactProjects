@@ -16,7 +16,7 @@ class SideNav extends Component {
 
             <li className="active">
               <NavLink to="/product" activeClassName="active-menu">
-                <i className="fa fa-sitemap" />
+                <i className="fa fa-list" />
                 <span>商品</span>
                 <span className="fa arrow" />
               </NavLink>
@@ -35,7 +35,7 @@ class SideNav extends Component {
             </li>
             <li className="active">
               <NavLink to="/order" activeClassName="active-menu">
-                <i className="fa fa-sitemap" />
+                <i className="fa fa-check-square-o" />
                 <span>订单</span>
                 <span className="fa arrow" />
               </NavLink>
@@ -49,7 +49,7 @@ class SideNav extends Component {
             </li>
             <li className="active">
               <NavLink to="/user" activeClassName="active-menu">
-                <i className="fa fa-sitemap" />
+                <i className="fa fa-user-o" />
                 <span>用户</span>
                 <span className="fa arrow" />
               </NavLink>
