@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import { FormattedMessage, formatMessage } from 'umi-plugin-react/locale'
-import { Spin, Tag, Menu, Icon, Avatar, Tooltip, message } from 'antd'
+import { Spin, Tag, Menu, Icon, Avatar, message } from 'antd'
 import moment from 'moment'
 import groupBy from 'lodash/groupBy'
 import NoticeIcon from '../NoticeIcon'
@@ -116,21 +116,10 @@ export default class GlobalHeaderRight extends PureComponent {
             console.log('enter', value) // eslint-disable-line
           }}
         />
-        <Tooltip title={formatMessage({ id: 'component.globalHeader.help' })}>
-          <a
-            target="_blank"
-            href="https://pro.ant.design/docs/getting-started"
-            rel="noopener noreferrer"
-            className={styles.action}
-          >
-            <Icon type="question-circle-o" />
-          </a>
-        </Tooltip>
         <NoticeIcon
           className={styles.action}
           count={currentUser.unreadCount}
           onItemClick={(item, tabProps) => {
-            console.log(item, tabProps) // eslint-disable-line
             this.changeReadState(item, tabProps)
           }}
           loading={fetchingNotices}

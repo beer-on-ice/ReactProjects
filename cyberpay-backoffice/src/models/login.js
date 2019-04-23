@@ -1,27 +1,40 @@
 import { routerRedux } from 'dva/router'
-import { stringify } from 'qs'
-import { fakeAccountLogin, getFakeCaptcha } from '@/services/api'
+import { accountLogin } from '@/services/user'
 import { setAuthority } from '@/utils/authority'
 import { getPageQuery } from '@/utils/utils'
 import { reloadAuthorized } from '@/utils/Authorized'
+import Storage from '@/utils/storage'
 
 export default {
   namespace: 'login',
-
-  state: {
-    status: undefined,
-  },
-
+  state: {},
   effects: {
+    // 登录
     *login({ payload }, { call, put }) {
-      const response = yield call(fakeAccountLogin, payload)
+      const param = {
+        name: payload.userName,
+        pwd: payload.password,
+      }
+
+      const response = yield call(accountLogin, param)
+
       yield put({
         type: 'changeLoginStatus',
-        payload: response,
+        payload: {
+          ...response,
+          currentAuthority: 'admin',
+        },
       })
-      // Login successfully
-      if (response.status === 'ok') {
-        reloadAuthorized()
+
+      // 设置token
+      yield Storage.setItem('Authorization', `Bearer ${response.data._t}`) // eslint-disable-line no-underscore-dangle
+
+      if (!!response && !!response.code && response.code === 200) {
+        Storage.setItem('userId', response.data.userInfo.id)
+        Storage.setItem('userName', response.data.userInfo.name)
+
+        yield reloadAuthorized()
+
         const urlParams = new URL(window.location.href)
         const params = getPageQuery()
         let { redirect } = params
@@ -39,41 +52,39 @@ export default {
         yield put(routerRedux.replace(redirect || '/'))
       }
     },
-
-    *getCaptcha({ payload }, { call }) {
-      yield call(getFakeCaptcha, payload)
-    },
-
-    *logout(_, { put }) {
-      yield put({
-        type: 'changeLoginStatus',
-        payload: {
-          status: false,
-          currentAuthority: 'guest',
-        },
-      })
-      reloadAuthorized()
-      // redirect
-      if (window.location.pathname !== '/user/login') {
-        yield put(
-          routerRedux.replace({
-            pathname: '/user/login',
-            search: stringify({
-              redirect: window.location.href,
-            }),
-          })
-        )
+    // 登出
+    *logout(_, { put, select }) {
+      try {
+        // 清除token
+        yield Storage.removeItem('Authorization')
+        yield Storage.removeItem('userId')
+        yield Storage.removeItem('userName')
+        // get location pathname
+        const urlParams = new URL(window.location.href)
+        const pathname = yield select(state => state.routing.location.pathname)
+        // add the parameters in the url
+        urlParams.searchParams.set('redirect', pathname)
+        window.history.replaceState(null, 'login', urlParams.href)
+      } finally {
+        yield put({
+          type: 'changeLoginStatus',
+          payload: {
+            currentAuthority: 'guest',
+          },
+        })
+        reloadAuthorized()
+        yield put(routerRedux.push('/user/login'))
       }
     },
   },
 
   reducers: {
     changeLoginStatus(state, { payload }) {
+      // 设置权限
       setAuthority(payload.currentAuthority)
       return {
         ...state,
-        status: payload.status,
-        type: payload.type,
+        ...payload,
       }
     },
   },

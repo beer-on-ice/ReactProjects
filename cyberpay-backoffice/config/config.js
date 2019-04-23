@@ -4,8 +4,6 @@ import pageRoutes from './router.config'
 import webpackPlugin from './plugin.config'
 import defaultSettings from '../src/defaultSettings'
 
-const { APP_TYPE } = process.env
-
 const plugins = [
   [
     'umi-plugin-react',
@@ -56,13 +54,13 @@ export default {
   theme: {
     'primary-color': defaultSettings.primaryColor,
   },
-  // proxy: {
-  //   '/server/api/': {
-  //     target: 'https://preview.pro.ant.design/',
-  //     changeOrigin: true,
-  //     pathRewrite: { '^/server': '' },
-  //   },
-  // },
+  proxy: {
+    '/server': {
+      target: 'http://192.168.31.229:8039/',
+      changeOrigin: true,
+      pathRewrite: { '^/server': '' },
+    },
+  },
   ignoreMomentLocale: true,
   lessLoaderOptions: {
     javascriptEnabled: true,

@@ -3,7 +3,6 @@ import defaultSettings from '../defaultSettings'
 
 let lessNodesAppended
 const updateTheme = primaryColor => {
-  // Determine if the component is remounted
   if (!primaryColor) {
     return
   }

@@ -1,10 +1,8 @@
 /* eslint-disable */
 import axios from 'axios'
-import _debug from 'debug'
 import { message, notification } from 'antd'
 import router from 'umi/router'
-
-const debug = _debug('app:Api')
+import Storage from './storage'
 
 // api host
 const env = {
@@ -27,6 +25,10 @@ const TIME_OUT = 2000000
 
 axios.defaults.timeout = TIME_OUT
 
+// token
+let token = Storage.getItem('Authorization')
+axios.defaults.headers.common['Authorization'] = token
+
 axios.defaults.headers.get['Content-Type'] = 'application/json'
 axios.defaults.headers.post['Content-Type'] = 'application/json'
 axios.defaults.headers.put['Content-Type'] = 'application/json'
@@ -35,9 +37,7 @@ axios.defaults.withCredentials = true
 //request to show loading
 axios.interceptors.request.use(
   config => {
-    // config.baseURL = config.baseURL === 'asset' ? AssetURL :BaseURL
     config.baseURL = BaseURL
-    debug('[AxiosConfig]', config)
     return config
   },
   error => {
@@ -48,8 +48,6 @@ axios.interceptors.request.use(
 //response to hide loading
 axios.interceptors.response.use(
   response => {
-    debug('[AxiosResponse]', response)
-
     const statusCode =
       !!response && !!response.data && !!response.data.code ? response.data.code : SUCCESS_CODE
     const msg = !!response && !!response.data && !!response.data.msg ? response.data.msg : ''
@@ -118,8 +116,6 @@ axios.interceptors.response.use(
     return response && response.data ? response.data : null
   },
   error => {
-    debug('[AxiosError]', error)
-    debug('[AxiosError]', error.response)
     /* eslint-disable no-underscore-dangle */
     const dispatch = window.g_app._store.dispatch
     const statusCode =

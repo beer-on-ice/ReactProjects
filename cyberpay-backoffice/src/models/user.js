@@ -1,4 +1,4 @@
-import { query as queryUsers, queryCurrent } from '@/services/user'
+import { query as queryUsers, queryCurrent, updatePassword } from '@/services/user'
 
 export default {
   namespace: 'user',
@@ -22,6 +22,16 @@ export default {
         type: 'saveCurrentUser',
         payload: response,
       })
+    },
+    // 修改密码
+    *updatePwd({ payload }, { call }) {
+      const userId = Storage.getItem('userId')
+      const param = {
+        oldPwd: payload.oldPassword,
+        newPwd: payload.password,
+        userId,
+      }
+      yield call(updatePassword, param)
     },
   },
 
