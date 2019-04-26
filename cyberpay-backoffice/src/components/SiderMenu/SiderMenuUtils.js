@@ -8,6 +8,7 @@ import { urlToList } from '../_utils/pathTools'
  */
 export const getFlatMenuKeys = menuData => {
   let keys = []
+
   menuData.forEach(item => {
     keys.push(item.path)
     if (item.children) {

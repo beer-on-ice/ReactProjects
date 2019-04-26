@@ -26,7 +26,7 @@ const TIME_OUT = 2000000
 axios.defaults.timeout = TIME_OUT
 
 // token
-let token = Storage.getItem('Authorization')
+let token = Storage.getItemJsonZlib('Authorization')
 axios.defaults.headers.common['Authorization'] = token
 
 axios.defaults.headers.get['Content-Type'] = 'application/json'

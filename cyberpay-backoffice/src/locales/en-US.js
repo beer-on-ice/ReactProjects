@@ -11,6 +11,7 @@ import settings from './en-US/settings'
 import pwa from './en-US/pwa'
 import component from './en-US/component'
 import editor from './en-US/editor'
+import systemuser from './en-US/systemuser'
 
 export default {
   'navBar.lang': 'Languages',
@@ -34,4 +35,5 @@ export default {
   ...pwa,
   ...component,
   ...editor,
+  ...systemuser,
 }

@@ -1,13 +1,16 @@
 import { routerRedux } from 'dva/router'
 import { accountLogin } from '@/services/user'
 import { setAuthority } from '@/utils/authority'
-import { getPageQuery } from '@/utils/utils'
 import { reloadAuthorized } from '@/utils/Authorized'
 import Storage from '@/utils/storage'
 
 export default {
   namespace: 'login',
-  state: {},
+
+  state: {
+    status: undefined,
+  },
+
   effects: {
     // 登录
     *login({ payload }, { call, put }) {
@@ -17,39 +20,24 @@ export default {
       }
 
       const response = yield call(accountLogin, param)
-
-      yield put({
-        type: 'changeLoginStatus',
-        payload: {
-          ...response,
-          currentAuthority: 'admin',
-        },
-      })
-
-      // 设置token
-      yield Storage.setItem('Authorization', `Bearer ${response.data._t}`) // eslint-disable-line no-underscore-dangle
-
       if (!!response && !!response.code && response.code === 200) {
-        Storage.setItem('userId', response.data.userInfo.id)
+        yield put({
+          type: 'changeLoginStatus',
+          payload: {
+            ...response,
+            currentAuthority: 'admin',
+          },
+        })
+
+        Storage.setItemJsonZlib('userId', response.data.userInfo.id)
         Storage.setItem('userName', response.data.userInfo.name)
+        // 设置token
+        // eslint-disable-next-line no-underscore-dangle
+        yield Storage.setItemJsonZlib('Authorization', `Bearer ${response.data._t}`)
 
         yield reloadAuthorized()
 
-        const urlParams = new URL(window.location.href)
-        const params = getPageQuery()
-        let { redirect } = params
-        if (redirect) {
-          const redirectUrlParams = new URL(redirect)
-          if (redirectUrlParams.origin === urlParams.origin) {
-            redirect = redirect.substr(urlParams.origin.length)
-            if (redirect.match(/^\/.*#/)) {
-              redirect = redirect.substr(redirect.indexOf('#') + 1)
-            }
-          } else {
-            redirect = null
-          }
-        }
-        yield put(routerRedux.replace(redirect || '/'))
+        yield (window.location.href = '/welcome')
       }
     },
     // 登出
@@ -69,7 +57,7 @@ export default {
         yield put({
           type: 'changeLoginStatus',
           payload: {
-            currentAuthority: 'guest',
+            currentAuthority: ['guest'],
           },
         })
         reloadAuthorized()
@@ -81,7 +69,7 @@ export default {
   reducers: {
     changeLoginStatus(state, { payload }) {
       // 设置权限
-      setAuthority(payload.currentAuthority)
+      setAuthority(payload.currentAuthority || ['guest'])
       return {
         ...state,
         ...payload,

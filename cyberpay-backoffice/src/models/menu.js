@@ -110,6 +110,11 @@ export default {
   effects: {
     *getMenuData({ payload }, { put }) {
       const { routes, authority, path } = payload
+
+      // 获取用户列表
+      // const userId = Storage.getItemJsonZlib('userId')
+      // const response = yield call(getMenuList, { userId })
+
       const originalMenuData = memoizeOneFormatter(routes, authority, path)
       const menuData = filterMenuData(originalMenuData)
       const breadcrumbNameMap = memoizeOneGetBreadcrumbNameMap(originalMenuData)

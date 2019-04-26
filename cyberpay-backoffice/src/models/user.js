@@ -16,6 +16,7 @@ export default {
         payload: response,
       })
     },
+    // 获取当前用户信息
     *fetchCurrent(_, { call, put }) {
       const response = yield call(queryCurrent)
       yield put({

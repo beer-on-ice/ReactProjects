@@ -4,14 +4,25 @@ export default [
     path: '/user',
     component: '../layouts/UserLayout',
     routes: [
-      { path: '/user', redirect: '/user/login' },
-      { path: '/user/login', name: 'login', component: './User/Login' },
-      { path: '/user/register', name: 'register', component: './User/Register' },
       {
-        path: '/user/register-result',
-        name: 'register.result',
-        component: './User/RegisterResult',
+        path: '/user',
+        redirect: '/user/login',
       },
+      {
+        path: '/user/login',
+        name: 'login',
+        component: './User/Login',
+      },
+      // {
+      //   path: '/user/register',
+      //   name: 'register',
+      //   component: './User/Register',
+      // },
+      // {
+      //   path: '/user/register-result',
+      //   name: 'register.result',
+      //   component: './User/RegisterResult',
+      // },
       {
         component: '404',
       },
@@ -20,11 +31,38 @@ export default [
   // app
   {
     path: '/',
+    authority: ['admin', 'user'],
     component: '../layouts/BasicLayout',
-    Routes: ['src/pages/Authorized'],
+    // Routes: ['src/pages/Authorized'],
     routes: [
+      {
+        path: '/',
+        redirect: '/welcome',
+      },
+      {
+        path: '/welcome',
+        component: './User/Welcome',
+        authority: ['admin', 'user'],
+      },
+      // 用户管理
+      {
+        name: 'systemuser',
+        path: '/system-user',
+        icon: 'table',
+        routes: [
+          {
+            name: 'userslist',
+            path: '/system-user/users-list',
+            component: './SystemUser/UsersList/',
+          },
+          {
+            name: 'roleslist',
+            path: '/system-user/roles-list',
+            component: './SystemUser/RolesList/',
+          },
+        ],
+      },
       // dashboard
-      { path: '/', redirect: '/dashboard/analysis', authority: ['admin', 'user'] },
       {
         path: '/dashboard',
         name: 'dashboard',
@@ -290,6 +328,7 @@ export default [
           },
         ],
       },
+
       {
         component: '404',
       },

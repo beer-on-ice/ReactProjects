@@ -46,19 +46,15 @@ const query = {
 class BasicLayout extends React.Component {
   componentDidMount() {
     const {
-      dispatch,
-      route: { routes, path, authority },
+      fetchCurrent,
+      getSetting,
+      getMenuData,
+      route: { routes, authority, path },
     } = this.props
-    dispatch({
-      type: 'user/fetchCurrent',
-    })
-    dispatch({
-      type: 'setting/getSetting',
-    })
-    dispatch({
-      type: 'menu/getMenuData',
-      payload: { routes, path, authority },
-    })
+
+    fetchCurrent()
+    getSetting()
+    getMenuData({ routes, authority, path })
   }
 
   getContext() {
@@ -80,11 +76,8 @@ class BasicLayout extends React.Component {
   }
 
   handleMenuCollapse = collapsed => {
-    const { dispatch } = this.props
-    dispatch({
-      type: 'global/changeLayoutCollapsed',
-      payload: collapsed,
-    })
+    const { changeLayoutCollapsed } = this.props
+    changeLayoutCollapsed(collapsed)
   }
 
   renderSettingDrawer = () => {
@@ -163,13 +156,48 @@ class BasicLayout extends React.Component {
   }
 }
 
-export default connect(({ global, setting, menu: menuModel }) => ({
+const mapStateToProps = ({ global, setting, menu: menuModel }) => ({
   collapsed: global.collapsed,
   layout: setting.layout,
   menuData: menuModel.menuData,
   breadcrumbNameMap: menuModel.breadcrumbNameMap,
   ...setting,
-}))(props => (
+})
+
+const mapDispatchToProps = dispatch => {
+  return {
+    // 获取当前用户
+    fetchCurrent() {
+      dispatch({
+        type: 'user/fetchCurrent',
+      })
+    },
+    // 获取设置
+    getSetting() {
+      dispatch({
+        type: 'setting/getSetting',
+      })
+    },
+    // 获取菜单
+    getMenuData(payload) {
+      dispatch({
+        type: 'menu/getMenuData',
+        payload,
+      })
+    },
+    changeLayoutCollapsed(collapsed) {
+      dispatch({
+        type: 'global/changeLayoutCollapsed',
+        payload: collapsed,
+      })
+    },
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(props => (
   <Media query="(max-width: 599px)">
     {isMobile => <BasicLayout {...props} isMobile={isMobile} />}
   </Media>

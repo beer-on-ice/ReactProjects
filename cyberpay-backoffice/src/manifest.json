@@ -1,6 +1,6 @@
 {
-  "name": "CyberPay Office",
-  "short_name": "CyberPay Office",
+  "name": "CberPay Office",
+  "short_name": "CberPay Office",
   "display": "standalone",
   "start_url": "./?utm_source=homescreen",
   "theme_color": "#002140",

@@ -56,7 +56,7 @@ export default {
   },
   proxy: {
     '/server': {
-      target: 'http://192.168.31.229:8039/',
+      target: 'http://192.168.31.229:8039/api/1.0/backOffice',
       changeOrigin: true,
       pathRewrite: { '^/server': '' },
     },
@@ -89,9 +89,9 @@ export default {
     },
   },
   manifest: {
-    name: 'CyberPay',
+    name: 'CberPay',
     background_color: '#FFF',
-    description: 'CyberPay backoffice',
+    description: 'CberPay backoffice',
     display: 'standalone',
     start_url: '/index.html',
     icons: [
