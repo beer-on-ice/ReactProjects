@@ -28,7 +28,7 @@ export default {
     *changeStatus({ payload }, { call, put }) {
       const response = yield call(changeSelectUserStatus, payload)
       if (response.code === 200) message.success('更新用户状态成功！')
-      yield call(fetch, { offset: 0, limit: 10 })
+      yield put({ type: 'fetch', payload: { offset: 0, limit: 10 } })
     },
   },
 

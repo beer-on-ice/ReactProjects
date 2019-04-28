@@ -134,9 +134,9 @@ class TableForm extends PureComponent {
     this.clickedCancel = false
   }
 
-  levelHandler = val => {
-    //  此处拿到选择的权限值，可发异步请求更新权限
-  }
+  // levelHandler = val => {
+  //   //  此处拿到选择的权限值，可发异步请求更新权限
+  // }
 
   render() {
     const columns = [

@@ -51,7 +51,5 @@ const RoleList = props => {
   )
 }
 
-const mapStateToProps = ({ loading }) => ({})
-
 const RolesList = Form.create({})(RoleList)
-export default connect(mapStateToProps)(RolesList)
+export default connect()(RolesList)
