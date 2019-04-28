@@ -1,4 +1,5 @@
 import { getUsersList, deleteSelectUser, changeSelectUserStatus } from '@/services/user'
+import { message } from 'antd'
 
 export default {
   namespace: 'systemuser',
@@ -13,7 +14,6 @@ export default {
     // 请求用户列表
     *fetch({ payload }, { call, put }) {
       const response = yield call(getUsersList, payload)
-
       yield put({
         type: 'save',
         payload: response,
@@ -21,12 +21,14 @@ export default {
     },
     // 删除选中的用户
     *remove({ payload }, { call }) {
+      // eslint-disable-next-line no-unused-vars
       const response = yield call(deleteSelectUser, payload)
     },
-    // 禁用全部
-    *changeStatus({ payload }, { call }) {
+    // 禁用选中的用户
+    *changeStatus({ payload }, { call, put }) {
       const response = yield call(changeSelectUserStatus, payload)
-      console.log(response)
+      if (response.code === 200) message.success('更新用户状态成功！')
+      yield call(fetch, { offset: 0, limit: 10 })
     },
   },
 
@@ -36,7 +38,6 @@ export default {
         (action.payload.data.pagination.offset + 1) / action.payload.data.pagination.pageSize
       )
       current = current < 1 ? 1 : current
-
       return {
         ...state,
         data: {
