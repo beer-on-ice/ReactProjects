@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'dva'
 import { formatMessage, FormattedMessage } from 'umi-plugin-react/locale'
 import Login from '@/components/Login'
-import styles from './Login.less'
+import styles from './index.less'
 
 const { UserName, Password, Submit } = Login
 

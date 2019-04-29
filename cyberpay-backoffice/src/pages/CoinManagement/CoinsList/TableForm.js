@@ -1,6 +1,7 @@
 import React, { PureComponent, Fragment } from 'react'
 import { Table, Button, Input, message, Popconfirm, Divider } from 'antd'
 import isEqual from 'lodash/isEqual'
+import { connect } from 'dva'
 import styles from './index.less'
 import LevelModal from './LevelModal'
 
@@ -11,7 +12,6 @@ class TableForm extends PureComponent {
 
   constructor(props) {
     super(props)
-
     this.state = {
       data: props.value,
       loading: false,
@@ -55,14 +55,26 @@ class TableForm extends PureComponent {
     const newData = data.map(item => ({ ...item }))
     newData.push({
       key: `NEW_TEMP_ID_${this.index}`,
-      workId: '',
-      name: '',
-      department: '',
+      id: '',
+      coinName: '',
+      coinDescription: '',
+      coinRegion: '',
       editable: true,
       isNew: true,
     })
+
     this.index += 1
     this.setState({ data: newData })
+  }
+
+  levelHandler = (val, fieldName, key) => {
+    const { data } = this.state
+    const newData = data.map(item => ({ ...item }))
+    const target = this.getRowByKey(key, newData)
+    if (target) {
+      target[fieldName] = val
+      this.setState({ data: newData })
+    }
   }
 
   remove(key) {
@@ -90,6 +102,7 @@ class TableForm extends PureComponent {
   }
 
   saveRow(e, key) {
+    const { updateCoinInfo, addCoin } = this.props
     e.persist()
     this.setState({
       loading: true,
@@ -100,18 +113,27 @@ class TableForm extends PureComponent {
         return
       }
       const target = this.getRowByKey(key) || {}
-      if (!target.workId || !target.name || !target.department) {
-        message.error('请填写完整成员信息。')
+      if (!target.coinAbbr || !target.coinName || !target.coinRegion || !target.coinDescription) {
+        message.error('请填写完整的信息。')
         e.target.focus()
         this.setState({
           loading: false,
         })
         return
       }
+
+      if (target.isNew) {
+        addCoin(target)
+      } else {
+        updateCoinInfo(target)
+      }
+
       delete target.isNew
       this.toggleEditable(e, key)
+
       const { data } = this.state
       const { onChange } = this.props
+
       onChange(data)
       this.setState({
         loading: false,
@@ -134,25 +156,20 @@ class TableForm extends PureComponent {
     this.clickedCancel = false
   }
 
-  // levelHandler = val => {
-  //   //  此处拿到选择的权限值，可发异步请求更新权限
-  // }
-
   render() {
     const columns = [
       {
-        title: '用户名',
-        dataIndex: 'name',
-        key: 'name',
+        key: 'coinName',
+        title: '名称',
+        dataIndex: 'coinName',
         render: (text, record) => {
           if (record.editable) {
             return (
               <Input
                 value={text}
-                autoFocus
-                onChange={e => this.handleFieldChange(e, 'name', record.key)}
+                onChange={e => this.handleFieldChange(e, 'coinName', record.key)}
                 onKeyPress={e => this.handleKeyPress(e, record.key)}
-                placeholder="用户名"
+                placeholder="币种名称"
               />
             )
           }
@@ -160,17 +177,17 @@ class TableForm extends PureComponent {
         },
       },
       {
-        title: '密码',
-        dataIndex: 'password',
-        key: 'password',
+        title: '简称',
+        dataIndex: 'coinAbbr',
+        key: 'coinAbbr',
         render: (text, record) => {
           if (record.editable) {
             return (
               <Input
                 value={text}
-                onChange={e => this.handleFieldChange(e, 'password', record.key)}
+                onChange={e => this.handleFieldChange(e, 'coinAbbr', record.key)}
                 onKeyPress={e => this.handleKeyPress(e, record.key)}
-                placeholder="密码"
+                placeholder="币种简称"
               />
             )
           }
@@ -178,17 +195,17 @@ class TableForm extends PureComponent {
         },
       },
       {
-        title: '所属部门',
-        dataIndex: 'department',
-        key: 'department',
+        title: '区域',
+        dataIndex: 'coinRegion',
+        key: 'coinRegion',
         render: (text, record) => {
           if (record.editable) {
             return (
               <Input
                 value={text}
-                onChange={e => this.handleFieldChange(e, 'department', record.key)}
+                onChange={e => this.handleFieldChange(e, 'coinRegion', record.key)}
                 onKeyPress={e => this.handleKeyPress(e, record.key)}
-                placeholder="所属部门"
+                placeholder="币种区域"
               />
             )
           }
@@ -196,29 +213,50 @@ class TableForm extends PureComponent {
         },
       },
       {
-        title: '创建人',
-        dataIndex: 'createUser',
-      },
-      {
-        title: '添加时间',
-        dataIndex: 'createDate',
-        render: (text, record) => {
-          return <span>{record.createDate}</span>
-        },
-      },
-      {
-        title: '等级',
-        dataIndex: 'level',
-        key: 'level',
+        title: '描述',
+        dataIndex: 'coinDescription',
+        key: 'coinDescription',
         render: (text, record) => {
           if (record.editable) {
             return (
-              <LevelModal record={record} onOk={val => this.levelHandler(val)}>
-                <a>更改权限</a>
-              </LevelModal>
+              <Input
+                value={text}
+                onChange={e => this.handleFieldChange(e, 'coinDescription', record.key)}
+                onKeyPress={e => this.handleKeyPress(e, record.key)}
+                placeholder="币种描述"
+              />
             )
           }
           return text
+        },
+      },
+      {
+        title: '状态',
+        dataIndex: 'coinStatus',
+        key: 'coinStatus',
+        render: (text, record) => {
+          if (record.editable) {
+            return (
+              <span>
+                <LevelModal
+                  record={record}
+                  onOk={val => this.levelHandler(val, 'coinStatus', record.key)}
+                >
+                  <a>修改状态</a>
+                </LevelModal>
+              </span>
+            )
+          }
+          return (
+            <span>
+              {// eslint-disable-next-line no-nested-ternary
+              record.coinStatus === 'available'
+                ? '正常使用'
+                : record.coinStatus === 'pending'
+                ? '待审核'
+                : '已禁用'}
+            </span>
+          )
         },
       },
       {
@@ -253,7 +291,7 @@ class TableForm extends PureComponent {
             <span>
               <a onClick={e => this.toggleEditable(e, record.key)}>编辑</a>
               <Divider type="vertical" />
-              <Popconfirm title="是否要删除此行？" onConfirm={() => this.remove(record.key)}>
+              <Popconfirm title="是否要删除此币种？" onConfirm={() => this.remove(record.key)}>
                 <a>删除</a>
               </Popconfirm>
             </span>
@@ -263,7 +301,6 @@ class TableForm extends PureComponent {
     ]
 
     const { loading, data } = this.state
-
     return (
       <Fragment>
         <Table
@@ -280,11 +317,46 @@ class TableForm extends PureComponent {
           onClick={this.newMember}
           icon="plus"
         >
-          新增管理员
+          新增币种
         </Button>
       </Fragment>
     )
   }
 }
 
-export default TableForm
+const mapDispatchToProps = dispatch => {
+  return {
+    updateCoinInfo(params) {
+      const param = {
+        coinId: params.id,
+        coinAbbr: params.coinAbbr,
+        coinDescription: params.coinDescription,
+        coinName: params.coinName,
+        coinRegion: params.coinRegion,
+        status: params.coinStatus,
+      }
+      dispatch({
+        type: 'coinmanagement/update',
+        payload: param,
+      })
+    },
+    addCoin(params) {
+      const param = {
+        coinAbbr: params.coinAbbr,
+        coinDescription: params.coinDescription,
+        coinName: params.coinName,
+        coinRegion: params.coinRegion,
+      }
+      dispatch({
+        type: 'coinmanagement/addCoin',
+        payload: param,
+      })
+    },
+  }
+}
+
+// export default TableForm
+export default connect(
+  null,
+  mapDispatchToProps
+)(TableForm)

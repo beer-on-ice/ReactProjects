@@ -12,6 +12,7 @@ import pwa from './en-US/pwa'
 import component from './en-US/component'
 import editor from './en-US/editor'
 import systemuser from './en-US/systemuser'
+import coinmanagement from './en-US/coinmanagement'
 
 export default {
   'navBar.lang': 'Languages',
@@ -36,4 +37,5 @@ export default {
   ...component,
   ...editor,
   ...systemuser,
+  ...coinmanagement,
 }

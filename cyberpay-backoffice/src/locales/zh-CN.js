@@ -12,6 +12,7 @@ import pwa from './zh-CN/pwa'
 import component from './zh-CN/component'
 import editor from './zh-CN/editor'
 import systemuser from './zh-CN/systemuser'
+import coinmanagement from './en-US/coinmanagement'
 
 export default {
   'navBar.lang': '语言',
@@ -36,4 +37,5 @@ export default {
   ...component,
   ...editor,
   ...systemuser,
+  ...coinmanagement,
 }

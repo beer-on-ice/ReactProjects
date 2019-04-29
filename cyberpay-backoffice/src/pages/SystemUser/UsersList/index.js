@@ -42,6 +42,8 @@ class TableList extends PureComponent {
     expandForm: false,
     selectedRows: [],
     formValues: {},
+    pageIndex: 0,
+    pageSize: 1,
   }
 
   columns = [
@@ -113,10 +115,11 @@ class TableList extends PureComponent {
   // 请求列表数据
   componentDidMount() {
     const { getUsersList } = this.props
+    const { pageIndex, pageSize } = this.state
 
     getUsersList({
-      offset: 0,
-      limit: 10,
+      offset: pageIndex,
+      limit: pageSize,
     })
   }
 
@@ -132,7 +135,7 @@ class TableList extends PureComponent {
   // 处理翻页、筛选等
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
     const { getUsersList } = this.props
-    const { formValues } = this.state
+    const { formValues, pageSize } = this.state
 
     const filters = Object.keys(filtersArg).reduce((obj, key) => {
       const newObj = { ...obj }
@@ -140,10 +143,12 @@ class TableList extends PureComponent {
       return newObj
     }, {})
 
+    // 当前页的第一条
     const offset = pagination.current * pagination.pageSize - 1
+
     const params = {
       offset,
-      limit: pagination.pageSize,
+      limit: pageSize,
       ...formValues,
       ...filters,
     }
@@ -152,7 +157,14 @@ class TableList extends PureComponent {
       params.sorter = `${sorter.field}_${sorter.order}`
     }
 
-    getUsersList(params)
+    this.setState(
+      {
+        pageIndex: offset,
+      },
+      () => {
+        getUsersList(params)
+      }
+    )
   }
 
   // 查看用户详情

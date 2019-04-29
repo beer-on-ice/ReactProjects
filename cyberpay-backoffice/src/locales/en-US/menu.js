@@ -46,4 +46,6 @@ export default {
   'menu.systemuser': 'User System',
   'menu.systemuser.userslist': 'Users List',
   'menu.systemuser.roleslist': 'Roles Management',
+  'menu.coinmanagement': 'Coins Management',
+  'menu.coinmanagement.coinslist': 'Coins List',
 }

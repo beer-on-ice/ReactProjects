@@ -11,17 +11,17 @@ export default [
       {
         path: '/user/login',
         name: 'login',
-        component: './User/Login',
+        component: './User/Login/',
       },
       // {
       //   path: '/user/register',
       //   name: 'register',
-      //   component: './User/Register',
+      //   component: './User/Register/',
       // },
       // {
       //   path: '/user/register-result',
       //   name: 'register.result',
-      //   component: './User/RegisterResult',
+      //   component: './User/Register/RegisterResult',
       // },
       {
         component: '404',
@@ -48,7 +48,7 @@ export default [
       {
         name: 'systemuser',
         path: '/system-user',
-        icon: 'table',
+        icon: 'usergroup-add',
         routes: [
           {
             name: 'userslist',
@@ -59,6 +59,19 @@ export default [
             name: 'roleslist',
             path: '/system-user/roles-list',
             component: './SystemUser/RolesList/',
+          },
+        ],
+      },
+      // 币管理
+      {
+        name: 'coinmanagement',
+        path: '/coin-management',
+        icon: 'copyright',
+        routes: [
+          {
+            name: 'coinslist',
+            path: '/coin-management/coin-management',
+            component: './CoinManagement/CoinsList/',
           },
         ],
       },
@@ -220,7 +233,7 @@ export default [
         ],
       },
       {
-        name: 'exception',
+        // name: 'exception',
         icon: 'warning',
         path: '/exception',
         routes: [
