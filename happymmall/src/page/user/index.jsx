@@ -51,38 +51,17 @@ class UserList extends Component {
         <td>{new Date(item.createTime).toLocaleString()}</td>
       </tr>
     ))
-    let listError = (
-      <tr>
-        <td colSpan="5" className="text-center">
-          {this.state.firstLoading ? '正在加载...' : '没有找到相应的结果'}
-        </td>
-      </tr>
-    )
-    let tableListBody = this.state.list.length > 0 ? listBody : listError
     return (
       <div id="page-wrapper">
         <PageTitle title="用户列表" />
-        <div className="row">
-          <div className="col-md-12">
-            <table className="table table-striped table-bordered">
-              <thead>
-                <tr>
-                  <td>ID</td>
-                  <td>用户名</td>
-                  <td>邮箱</td>
-                  <td>电话</td>
-                  <td>注册时间</td>
-                </tr>
-              </thead>
-              <tbody>{tableListBody}</tbody>
-            </table>
-          </div>
-          <Pagination
-            current={this.state.pageNum}
-            total={this.state.total}
-            onChange={pageNum => this.onPageNumChange(pageNum)}
-          />
-        </div>
+        <TableList tableHeads={['ID', '用户名', '邮箱', '电话', '注册时间']}>
+          {listBody}
+        </TableList>
+        <Pagination
+          current={this.state.pageNum}
+          total={this.state.total}
+          onChange={pageNum => this.onPageNumChange(pageNum)}
+        />
       </div>
     )
   }

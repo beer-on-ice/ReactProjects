@@ -21,7 +21,7 @@ class TableList extends React.Component {
             {tableHead.name}
           </th>
         )
-      } else if (typeof tableHead === 'String') {
+      } else if (typeof tableHead === 'string') {
         return <th key={index}>{tableHead}</th>
       }
     })
