@@ -8,6 +8,8 @@ import TableList from 'util/table-list/index.jsx'
 import MUtil from 'util/mm.jsx'
 import Product from 'service/product-service.jsx'
 
+import './index.scss'
+
 const _mm = new MUtil()
 const _product = new Product()
 
@@ -41,6 +43,29 @@ class ProductList extends Component {
       this.loadProductList()
     })
   }
+  // 设置上/下架
+  onSetProductStatus(e, id, currentStatus) {
+    let newStatus = currentStatus === 1 ? 2 : 1,
+      confirmTips =
+        currentStatus === 1 ? '确定要下架该商品吗？' : '确定要上架该商品吗？'
+    if (window.confirm(confirmTips)) {
+      _product
+        .setProductStatus({
+          productId: id,
+          status: newStatus
+        })
+        .then(
+          res => {
+            _mm.successTips(res)
+            this.loadProductList()
+          },
+          errMsg => {
+            _mm.errorTips(res)
+          }
+        )
+    }
+  }
+
   render() {
     let tableHeads = [
       { name: '商品ID', width: '10%' },
@@ -58,11 +83,23 @@ class ProductList extends Component {
         </td>
         <td>￥{item.price}</td>
         <td>
-          <span>{item.status == 1 ? '在售' : '已下架'}</span>
+          <p>{item.status == 1 ? '在售' : '已下架'}</p>
+          <button
+            className="btn btn-warning btn-xs"
+            onClick={e => {
+              this.onSetProductStatus(e, item.id, item.status)
+            }}
+          >
+            {item.status == 1 ? '下架' : '上架'}
+          </button>
         </td>
         <td>
-          <Link to={`/product/detail/${item.id}`}>查看详情</Link>
-          <Link to={`/product/save/${item.id}`}>编辑</Link>
+          <Link className="operate" to={`/product/detail/${item.id}`}>
+            详情
+          </Link>
+          <Link className="operate" to={`/product/save/${item.id}`}>
+            编辑
+          </Link>
         </td>
       </tr>
     ))

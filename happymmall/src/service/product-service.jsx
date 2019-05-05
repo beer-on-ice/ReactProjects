@@ -12,6 +12,14 @@ class Product {
       }
     })
   }
+  // 上下架产品
+  setProductStatus(params) {
+    return _mm.request({
+      type: 'post',
+      url: '/manage/product/set_sale_status.do',
+      data: params
+    })
+  }
 }
 
 export default Product

@@ -8,8 +8,8 @@ class ProductRouter extends Component {
   render() {
     return (
       <Switch>
-        <Route path="/product/index" component={ProductList} />
         <Redirect exact from="/product" to="/product/index" />
+        <Route path="/product/index" component={ProductList} />
       </Switch>
     )
   }

@@ -8,6 +8,7 @@ import {
 } from 'react-router-dom'
 
 import Layout from 'component/layout/index.jsx'
+import ProductRouter from 'page/product/router.jsx'
 // 页面
 import Home from 'page/home/index.jsx'
 import UserList from 'page/user/index.jsx'
@@ -20,8 +21,7 @@ class App extends React.Component {
       <Layout>
         <Switch>
           <Route exact path="/" component={Home} />
-          <Route path="/product" component={Home} />
-          <Route path="/product-category" component={Home} />
+          <Route path="/product" component={ProductRouter} />
           <Route path="/order" component={Home} />
           <Route path="/user/index" component={UserList} />
           <Redirect exact from="/user" to="/user/index" />
