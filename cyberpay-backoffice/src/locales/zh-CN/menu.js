@@ -46,6 +46,6 @@ export default {
   'menu.systemuser': '用户系统',
   'menu.systemuser.userslist': '用户列表',
   'menu.systemuser.roleslist': '角色管理',
-  'menu.coinmanagement': '虚拟币管理',
-  'menu.coinmanagement.coinslist': '虚拟币列表',
+  'menu.coinmanagement': '加密币管理',
+  'menu.coinmanagement.coinslist': '加密币列表',
 }

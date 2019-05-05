@@ -14,9 +14,9 @@ class TableForm extends PureComponent {
     super(props)
     this.state = {
       data: props.value,
+      value: props.value,
       loading: false,
       /* eslint-disable-next-line react/no-unused-state */
-      value: props.value,
     }
   }
 
@@ -30,20 +30,21 @@ class TableForm extends PureComponent {
     }
   }
 
-  getRowByKey(key, newData) {
+  getRowByKey(id, newData) {
     const { data } = this.state
-    return (newData || data).filter(item => item.key === key)[0]
+    return (newData || data).filter(item => item.id === id)[0]
   }
 
-  toggleEditable = (e, key) => {
+  toggleEditable = (e, id) => {
     e.preventDefault()
     const { data } = this.state
     const newData = data.map(item => ({ ...item }))
-    const target = this.getRowByKey(key, newData)
+    const target = this.getRowByKey(id, newData)
+
     if (target) {
       // 进入编辑状态时保存原始数据
       if (!target.editable) {
-        this.cacheOriginData[key] = { ...target }
+        this.cacheOriginData[id] = { ...target }
       }
       target.editable = !target.editable
       this.setState({ data: newData })
@@ -54,8 +55,7 @@ class TableForm extends PureComponent {
     const { data } = this.state
     const newData = data.map(item => ({ ...item }))
     newData.push({
-      key: `NEW_TEMP_ID_${this.index}`,
-      id: '',
+      id: `NEW_TEMP_ID_${this.index}`,
       coinName: '',
       coinDescription: '',
       coinRegion: '',
@@ -67,42 +67,44 @@ class TableForm extends PureComponent {
     this.setState({ data: newData })
   }
 
-  levelHandler = (val, fieldName, key) => {
+  levelHandler = (val, fieldName, id) => {
     const { data } = this.state
     const newData = data.map(item => ({ ...item }))
-    const target = this.getRowByKey(key, newData)
+    const target = this.getRowByKey(id, newData)
     if (target) {
       target[fieldName] = val
       this.setState({ data: newData })
     }
   }
 
-  remove(key) {
+  remove(id) {
     const { data } = this.state
     const { onChange } = this.props
-    const newData = data.filter(item => item.key !== key)
+    const newData = data.filter(item => item.id !== id)
     this.setState({ data: newData })
     onChange(newData)
   }
 
-  handleKeyPress(e, key) {
-    if (e.key === 'Enter') {
-      this.saveRow(e, key)
+  handleKeyPress(e, id) {
+    if (e.id === 'Enter') {
+      this.saveRow(e, id)
     }
   }
 
-  handleFieldChange(e, fieldName, key) {
+  handleFieldChange(e, fieldName, id) {
     const { data } = this.state
     const newData = data.map(item => ({ ...item }))
-    const target = this.getRowByKey(key, newData)
+    const target = this.getRowByKey(id, newData)
     if (target) {
       target[fieldName] = e.target.value
       this.setState({ data: newData })
     }
   }
 
-  saveRow(e, key) {
+  saveRow(e, id) {
     const { updateCoinInfo, addCoin } = this.props
+    const { data } = this.state
+
     e.persist()
     this.setState({
       loading: true,
@@ -112,7 +114,8 @@ class TableForm extends PureComponent {
         this.clickedCancel = false
         return
       }
-      const target = this.getRowByKey(key) || {}
+      const target = this.getRowByKey(id) || {}
+
       if (!target.coinAbbr || !target.coinName || !target.coinRegion || !target.coinDescription) {
         message.error('请填写完整的信息。')
         e.target.focus()
@@ -122,34 +125,39 @@ class TableForm extends PureComponent {
         return
       }
 
-      if (target.isNew) {
-        addCoin(target)
-      } else {
-        updateCoinInfo(target)
+      // 判断是否重名
+      let tempData = JSON.parse(JSON.stringify(data))
+      tempData = tempData.filter(item => item.coinName === target.coinName)
+      if (tempData.length > 1) {
+        message.error('加密币的名字已存在，请换一个吧~')
+        e.target.focus()
+        this.setState({
+          loading: false,
+        })
+        return
       }
 
+      if (target.isNew) addCoin(target)
+      else updateCoinInfo(target)
+
       delete target.isNew
-      this.toggleEditable(e, key)
+      this.toggleEditable(e, id)
 
-      const { data } = this.state
-      const { onChange } = this.props
-
-      onChange(data)
       this.setState({
         loading: false,
       })
     }, 500)
   }
 
-  cancel(e, key) {
+  cancel(e, id) {
     this.clickedCancel = true
     e.preventDefault()
     const { data } = this.state
     const newData = data.map(item => ({ ...item }))
-    const target = this.getRowByKey(key, newData)
-    if (this.cacheOriginData[key]) {
-      Object.assign(target, this.cacheOriginData[key])
-      delete this.cacheOriginData[key]
+    const target = this.getRowByKey(id, newData)
+    if (this.cacheOriginData[id]) {
+      Object.assign(target, this.cacheOriginData[id])
+      delete this.cacheOriginData[id]
     }
     target.editable = false
     this.setState({ data: newData })
@@ -159,7 +167,7 @@ class TableForm extends PureComponent {
   render() {
     const columns = [
       {
-        key: 'coinName',
+        id: 'coinName',
         title: '名称',
         dataIndex: 'coinName',
         render: (text, record) => {
@@ -167,8 +175,8 @@ class TableForm extends PureComponent {
             return (
               <Input
                 value={text}
-                onChange={e => this.handleFieldChange(e, 'coinName', record.key)}
-                onKeyPress={e => this.handleKeyPress(e, record.key)}
+                onChange={e => this.handleFieldChange(e, 'coinName', record.id)}
+                onKeyPress={e => this.handleKeyPress(e, record.id)}
                 placeholder="币种名称"
               />
             )
@@ -179,14 +187,14 @@ class TableForm extends PureComponent {
       {
         title: '简称',
         dataIndex: 'coinAbbr',
-        key: 'coinAbbr',
+        id: 'coinAbbr',
         render: (text, record) => {
           if (record.editable) {
             return (
               <Input
                 value={text}
-                onChange={e => this.handleFieldChange(e, 'coinAbbr', record.key)}
-                onKeyPress={e => this.handleKeyPress(e, record.key)}
+                onChange={e => this.handleFieldChange(e, 'coinAbbr', record.id)}
+                onKeyPress={e => this.handleKeyPress(e, record.id)}
                 placeholder="币种简称"
               />
             )
@@ -197,14 +205,14 @@ class TableForm extends PureComponent {
       {
         title: '区域',
         dataIndex: 'coinRegion',
-        key: 'coinRegion',
+        id: 'coinRegion',
         render: (text, record) => {
           if (record.editable) {
             return (
               <Input
                 value={text}
-                onChange={e => this.handleFieldChange(e, 'coinRegion', record.key)}
-                onKeyPress={e => this.handleKeyPress(e, record.key)}
+                onChange={e => this.handleFieldChange(e, 'coinRegion', record.id)}
+                onKeyPress={e => this.handleKeyPress(e, record.id)}
                 placeholder="币种区域"
               />
             )
@@ -215,14 +223,14 @@ class TableForm extends PureComponent {
       {
         title: '描述',
         dataIndex: 'coinDescription',
-        key: 'coinDescription',
+        id: 'coinDescription',
         render: (text, record) => {
           if (record.editable) {
             return (
               <Input
                 value={text}
-                onChange={e => this.handleFieldChange(e, 'coinDescription', record.key)}
-                onKeyPress={e => this.handleKeyPress(e, record.key)}
+                onChange={e => this.handleFieldChange(e, 'coinDescription', record.id)}
+                onKeyPress={e => this.handleKeyPress(e, record.id)}
                 placeholder="币种描述"
               />
             )
@@ -233,14 +241,14 @@ class TableForm extends PureComponent {
       {
         title: '状态',
         dataIndex: 'coinStatus',
-        key: 'coinStatus',
+        id: 'coinStatus',
         render: (text, record) => {
           if (record.editable) {
             return (
               <span>
                 <LevelModal
                   record={record}
-                  onOk={val => this.levelHandler(val, 'coinStatus', record.key)}
+                  onOk={val => this.levelHandler(val, 'coinStatus', record.id)}
                 >
                   <a>修改状态</a>
                 </LevelModal>
@@ -261,7 +269,7 @@ class TableForm extends PureComponent {
       },
       {
         title: '操作',
-        key: 'action',
+        id: 'action',
         render: (text, record) => {
           const { loading } = this.state
           if (!!record.editable && loading) {
@@ -271,9 +279,9 @@ class TableForm extends PureComponent {
             if (record.isNew) {
               return (
                 <span>
-                  <a onClick={e => this.saveRow(e, record.key)}>添加</a>
+                  <a onClick={e => this.saveRow(e, record.id)}>添加</a>
                   <Divider type="vertical" />
-                  <Popconfirm title="是否要删除此行？" onConfirm={() => this.remove(record.key)}>
+                  <Popconfirm title="是否要删除此行？" onConfirm={() => this.remove(record.id)}>
                     <a>删除</a>
                   </Popconfirm>
                 </span>
@@ -281,17 +289,17 @@ class TableForm extends PureComponent {
             }
             return (
               <span>
-                <a onClick={e => this.saveRow(e, record.key)}>保存</a>
+                <a onClick={e => this.saveRow(e, record.id)}>保存</a>
                 <Divider type="vertical" />
-                <a onClick={e => this.cancel(e, record.key)}>取消</a>
+                <a onClick={e => this.cancel(e, record.id)}>取消</a>
               </span>
             )
           }
           return (
             <span>
-              <a onClick={e => this.toggleEditable(e, record.key)}>编辑</a>
+              <a onClick={e => this.toggleEditable(e, record.id)}>编辑</a>
               <Divider type="vertical" />
-              <Popconfirm title="是否要删除此币种？" onConfirm={() => this.remove(record.key)}>
+              <Popconfirm title="是否要删除此币种？" onConfirm={() => this.remove(record.id)}>
                 <a>删除</a>
               </Popconfirm>
             </span>
