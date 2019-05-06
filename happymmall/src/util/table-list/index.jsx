@@ -4,11 +4,11 @@ class TableList extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      firstLoading: true
+      isFirstLoading: true
     }
   }
   componentWillReceiveProps() {
-    // 列表只有在第一次挂载的时候，firstLoading为true,其他情况为false
+    // 列表只有在第一次挂载的时候，isFirstLoading为true,其他情况为false
     this.setState({
       isFirstLoading: false
     })
@@ -29,7 +29,7 @@ class TableList extends React.Component {
     let listInfo = (
       <tr>
         <td colSpan={this.props.tableHeads.length} className="text-center">
-          {this.state.firstLoading ? '正在加载...' : '没有找到相应的结果'}
+          {this.state.isFirstLoading ? '正在加载...' : '没有找到相应的结果'}
         </td>
       </tr>
     )
