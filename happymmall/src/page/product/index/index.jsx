@@ -21,9 +21,12 @@ class ProductList extends Component {
       pageNum: 1
     }
   }
+
   componentDidMount() {
     this.loadProductList()
   }
+
+  // 加载商品列表
   loadProductList() {
     _product.getProductList(this.state.pageNum).then(
       res => {
@@ -106,6 +109,31 @@ class ProductList extends Component {
     return (
       <div id="page-wrapper">
         <PageTitle title="商品列表" />
+        <div className="row">
+          <div className="col-md-12">
+            <form className="form-inline">
+              <div className="form-group">
+                <input
+                  type="email"
+                  className="form-control"
+                  id="exampleInputEmail3"
+                  placeholder="Email"
+                />
+              </div>
+              <div className="form-group">
+                <input
+                  type="password"
+                  className="form-control"
+                  id="exampleInputPassword3"
+                  placeholder="Password"
+                />
+              </div>
+              <button type="submit" className="btn btn-default">
+                Sign in
+              </button>
+            </form>
+          </div>
+        </div>
         <TableList tableHeads={tableHeads}>{listBody}</TableList>
         <Pagination
           current={this.state.pageNum}
