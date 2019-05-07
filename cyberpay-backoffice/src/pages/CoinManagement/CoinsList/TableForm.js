@@ -1,9 +1,10 @@
 import React, { PureComponent, Fragment } from 'react'
-import { Table, Button, Input, message, Popconfirm, Divider } from 'antd'
+import { Table, Button, Input, message, Popconfirm, Divider, Badge, Tooltip } from 'antd'
 import isEqual from 'lodash/isEqual'
 import { connect } from 'dva'
 import styles from './index.less'
 import LevelModal from './LevelModal'
+import RateModal from './RateModal'
 
 class TableForm extends PureComponent {
   index = 0
@@ -16,7 +17,6 @@ class TableForm extends PureComponent {
       data: props.value,
       value: props.value,
       loading: false,
-      /* eslint-disable-next-line react/no-unused-state */
     }
   }
 
@@ -71,9 +71,19 @@ class TableForm extends PureComponent {
     const { data } = this.state
     const newData = data.map(item => ({ ...item }))
     const target = this.getRowByKey(id, newData)
+
     if (target) {
       target[fieldName] = val
       this.setState({ data: newData })
+    }
+  }
+
+  rateHandler = (val, fieldName, id, flag) => {
+    const { setCoinRate, updateCoinRate } = this.props
+    if (flag) {
+      setCoinRate(val, id)
+    } else {
+      updateCoinRate(val, id)
     }
   }
 
@@ -117,7 +127,7 @@ class TableForm extends PureComponent {
       const target = this.getRowByKey(id) || {}
 
       if (!target.coinAbbr || !target.coinName || !target.coinRegion || !target.coinDescription) {
-        message.error('请填写完整的信息。')
+        message.error('请填写完整的信息~')
         e.target.focus()
         this.setState({
           loading: false,
@@ -245,14 +255,27 @@ class TableForm extends PureComponent {
         render: (text, record) => {
           if (record.editable) {
             return (
-              <span>
+              <div>
+                <span>
+                  {// eslint-disable-next-line no-nested-ternary
+                  record.coinStatus === 'available'
+                    ? '正常使用'
+                    : record.coinStatus === 'pending'
+                    ? '待审核'
+                    : '已禁用'}
+                </span>
                 <LevelModal
                   record={record}
                   onOk={val => this.levelHandler(val, 'coinStatus', record.id)}
                 >
-                  <a>修改状态</a>
+                  <Button
+                    type="primary"
+                    icon="setting"
+                    size="small"
+                    style={{ marginLeft: '5px' }}
+                  />
                 </LevelModal>
-              </span>
+              </div>
             )
           }
           return (
@@ -263,6 +286,60 @@ class TableForm extends PureComponent {
                 : record.coinStatus === 'pending'
                 ? '待审核'
                 : '已禁用'}
+            </span>
+          )
+        },
+      },
+      {
+        title: '费率',
+        dataIndex: 'coinRate',
+        id: 'coinRate',
+        render: (text, record) => {
+          return (
+            <span>
+              {record.coinRate.length === 0 ? (
+                <span>
+                  <RateModal
+                    record={record}
+                    onOk={val => this.rateHandler(val, 'coinStatus', record.id, true)}
+                  >
+                    <Button
+                      type="primary"
+                      icon="setting"
+                      size="small"
+                      style={{ marginLeft: '5px' }}
+                    >
+                      初次设置
+                    </Button>
+                  </RateModal>
+                </span>
+              ) : (
+                <div>
+                  <Tooltip title="低费率">
+                    <Badge status="error" />
+                    {record.coinRate[0]}
+                  </Tooltip>
+                  <Tooltip title="中等费率">
+                    <Badge status="warning" style={{ marginLeft: '5px' }} />
+                    {record.coinRate[1]}
+                  </Tooltip>
+                  <Tooltip title="高费率">
+                    <Badge status="success" style={{ marginLeft: '5px' }} />
+                    {record.coinRate[2]}
+                  </Tooltip>
+                  <RateModal
+                    record={record}
+                    onOk={val => this.rateHandler(val, 'coinStatus', record.id, false)}
+                  >
+                    <Button
+                      type="danger"
+                      icon="setting"
+                      size="small"
+                      style={{ marginLeft: '5px' }}
+                    />
+                  </RateModal>
+                </div>
+              )}
             </span>
           )
         },
@@ -334,6 +411,20 @@ class TableForm extends PureComponent {
 
 const mapDispatchToProps = dispatch => {
   return {
+    // 新增币
+    addCoin(params) {
+      const param = {
+        coinAbbr: params.coinAbbr,
+        coinDescription: params.coinDescription,
+        coinName: params.coinName,
+        coinRegion: params.coinRegion,
+      }
+      dispatch({
+        type: 'coinmanagement/addCoin',
+        payload: param,
+      })
+    },
+    // 更新币信息
     updateCoinInfo(params) {
       const param = {
         coinId: params.id,
@@ -348,22 +439,33 @@ const mapDispatchToProps = dispatch => {
         payload: param,
       })
     },
-    addCoin(params) {
+    // 初次添加/设定费率
+    setCoinRate(params, id) {
       const param = {
-        coinAbbr: params.coinAbbr,
-        coinDescription: params.coinDescription,
-        coinName: params.coinName,
-        coinRegion: params.coinRegion,
+        coinId: id,
+        rateDescription: params.rateDescription,
+        coinRate: [params.lowVal, params.mediumVal, params.highVal],
       }
       dispatch({
-        type: 'coinmanagement/addCoin',
+        type: 'coinmanagement/setRate',
+        payload: param,
+      })
+    },
+    // 修改费率
+    updateCoinRate(params, id) {
+      const param = {
+        coinId: id,
+        rateDescription: params.rateDescription,
+        coinRate: [params.lowVal, params.mediumVal, params.highVal],
+      }
+      dispatch({
+        type: 'coinmanagement/updateRate',
         payload: param,
       })
     },
   }
 }
 
-// export default TableForm
 export default connect(
   null,
   mapDispatchToProps

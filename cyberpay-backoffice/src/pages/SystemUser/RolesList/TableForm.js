@@ -65,6 +65,11 @@ class TableForm extends PureComponent {
     this.setState({ data: newData })
   }
 
+  levelHandler = () => {
+    // console.log(val)
+    //  此处拿到选择的权限值，可发异步请求更新权限
+  }
+
   remove(key) {
     const { data } = this.state
     const { onChange } = this.props
@@ -133,10 +138,6 @@ class TableForm extends PureComponent {
     this.setState({ data: newData })
     this.clickedCancel = false
   }
-
-  // levelHandler = val => {
-  //   //  此处拿到选择的权限值，可发异步请求更新权限
-  // }
 
   render() {
     const columns = [

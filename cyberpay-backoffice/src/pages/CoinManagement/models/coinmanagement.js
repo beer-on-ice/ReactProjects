@@ -1,4 +1,10 @@
-import { getCoinsList, updateCoinsInfo, addCoins } from '@/services/coin'
+import {
+  getCoinsList,
+  updateCoinsInfo,
+  addCoins,
+  setCoinRate,
+  updateCoinRate,
+} from '@/services/coin'
 
 export default {
   namespace: 'coinmanagement',
@@ -23,6 +29,14 @@ export default {
     },
     *addCoin({ payload }, { call, put }) {
       yield call(addCoins, payload)
+      yield put({ type: 'fetch' })
+    },
+    *setRate({ payload }, { call, put }) {
+      yield call(setCoinRate, payload)
+      yield put({ type: 'fetch' })
+    },
+    *updateRate({ payload }, { call, put }) {
+      yield call(updateCoinRate, payload)
       yield put({ type: 'fetch' })
     },
   },

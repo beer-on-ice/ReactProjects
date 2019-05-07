@@ -43,7 +43,7 @@ class TableList extends PureComponent {
     selectedRows: [],
     formValues: {},
     pageIndex: 0,
-    pageSize: 1,
+    pageSize: 10,
   }
 
   columns = [
