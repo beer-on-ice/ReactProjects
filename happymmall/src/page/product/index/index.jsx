@@ -7,6 +7,7 @@ import TableList from 'util/table-list/index.jsx'
 
 import MUtil from 'util/mm.jsx'
 import Product from 'service/product-service.jsx'
+import ListSearch from './index-list-search.jsx'
 
 import './index.scss'
 
@@ -18,7 +19,10 @@ class ProductList extends Component {
     super(props)
     this.state = {
       list: [],
-      pageNum: 1
+      pageNum: 1,
+      listType: 'list',
+      searchType: '',
+      searchKeyWord: ''
     }
   }
 
@@ -28,7 +32,15 @@ class ProductList extends Component {
 
   // 加载商品列表
   loadProductList() {
-    _product.getProductList(this.state.pageNum).then(
+    let listParam = {}
+    listParam.pageNum = this.state.pageNum
+    listParam.listType = this.state.listType
+
+    if (this.state.listType === 'search') {
+      listParam.searchType = this.state.searchType
+      listParam.keyword = this.state.searchKeyWord
+    }
+    _product.getProductList(listParam).then(
       res => {
         this.setState(res)
       },
@@ -67,6 +79,21 @@ class ProductList extends Component {
           }
         )
     }
+  }
+  // 搜索
+  onSearch(type, keyword) {
+    let listType = keyword === '' ? 'list' : 'search'
+    this.setState(
+      {
+        listType: listType,
+        pageNum: 1,
+        searchType: type,
+        searchKeyWord: keyword
+      },
+      () => {
+        this.loadProductList()
+      }
+    )
   }
 
   render() {
@@ -109,31 +136,11 @@ class ProductList extends Component {
     return (
       <div id="page-wrapper">
         <PageTitle title="商品列表" />
-        <div className="row">
-          <div className="col-md-12">
-            <form className="form-inline">
-              <div className="form-group">
-                <input
-                  type="email"
-                  className="form-control"
-                  id="exampleInputEmail3"
-                  placeholder="Email"
-                />
-              </div>
-              <div className="form-group">
-                <input
-                  type="password"
-                  className="form-control"
-                  id="exampleInputPassword3"
-                  placeholder="Password"
-                />
-              </div>
-              <button type="submit" className="btn btn-default">
-                Sign in
-              </button>
-            </form>
-          </div>
-        </div>
+        <ListSearch
+          onSearch={(searchType, searchKeyWord) =>
+            this.onSearch(searchType, searchKeyWord)
+          }
+        />
         <TableList tableHeads={tableHeads}>{listBody}</TableList>
         <Pagination
           current={this.state.pageNum}
