@@ -135,7 +135,14 @@ class ProductList extends Component {
     ))
     return (
       <div id="page-wrapper">
-        <PageTitle title="商品列表" />
+        <PageTitle title="商品列表">
+          <div className="page-header-right">
+            <Link to="/product/save" className="btn btn-primary">
+              <i className="fa fa-plus" />
+              <span>添加商品</span>
+            </Link>
+          </div>
+        </PageTitle>
         <ListSearch
           onSearch={(searchType, searchKeyWord) =>
             this.onSearch(searchType, searchKeyWord)
