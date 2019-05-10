@@ -20,6 +20,31 @@ class CategorySelector extends Component {
   componentDidMount() {
     this.loadFirstCategory()
   }
+  componentWillReceiveProps(nextProps) {
+    let categoryIdChange = this.props.categoryId !== nextProps.categoryId,
+      parentCategoryIdChange =
+        this.props.parentCategoryId !== nextProps.parentCategoryId
+    if (!categoryIdChange && !parentCategoryIdChange) return
+    // 假如只有一级品类
+    if (nextProps.parentCategoryId === 0) {
+      this.setState({
+        firstCategoryId: nextProps.categoryId,
+        secondCategoryId: 0
+      })
+    }
+    // 有两级品类
+    else {
+      this.setState(
+        {
+          firstCategoryId: nextProps.categoryId,
+          secondCategoryId: nextProps.parentCategoryId
+        },
+        () => {
+          parentCategoryIdChange && this.loadSecondCategory()
+        }
+      )
+    }
+  }
   // 加载一级分类
   loadFirstCategory() {
     _product.getCategoryList().then(
@@ -49,6 +74,7 @@ class CategorySelector extends Component {
 
   // 选择一级品类
   onFirstCategoryChange(e) {
+    if (this.props.readOnly) return
     let newVal = e.target.value || 0
     this.setState(
       {
@@ -64,6 +90,7 @@ class CategorySelector extends Component {
   }
   // 选择二级品类
   onSecondCategoryChange(e) {
+    if (this.props.readOnly) return
     let newVal = e.target.value || 0
     this.setState(
       {
@@ -97,7 +124,9 @@ class CategorySelector extends Component {
       <div>
         <select
           className="form-control cate-select"
+          value={this.state.firstCategoryId}
           onChange={e => this.onFirstCategoryChange(e)}
+          readOnly={this.props.readOnly}
         >
           <option value="">请选择一级分类</option>
           {this.state.firstCategoryList.map(category => (
@@ -109,7 +138,9 @@ class CategorySelector extends Component {
         {this.state.secondCategoryList.length ? (
           <select
             className="form-control cate-select"
+            value={this.state.secondCategoryId}
             onChange={e => this.onSecondCategoryChange(e)}
+            readOnly={this.props.readOnly}
           >
             <option value="">请选择二级分类</option>
             {this.state.secondCategoryList.map(category => (
