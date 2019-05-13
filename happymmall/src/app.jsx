@@ -12,6 +12,8 @@ import ProductRouter from 'page/product/router.jsx'
 // 页面
 import Home from 'page/home/index.jsx'
 import UserList from 'page/user/index.jsx'
+import OrderList from 'page/order/index.jsx'
+import OrderDetail from 'page/order/detail.jsx'
 import Login from 'page/login/index.jsx'
 import ErrorPage from 'page/error/index.jsx'
 
@@ -23,10 +25,12 @@ class App extends React.Component {
           <Route exact path="/" component={Home} />
           <Route path="/product" component={ProductRouter} />
           <Route path="/product-category" component={ProductRouter} />
-          <Route path="/order" component={Home} />
+          <Route path="/order/index" component={OrderList} />
+          <Route path="/order/detail/:orderNumber" component={OrderDetail} />
           <Route path="/user/index" component={UserList} />
-          <Route component={ErrorPage} />
           <Redirect exact from="/user" to="/user/index" />
+          <Redirect exact from="/order" to="/order/index" />
+          <Route component={ErrorPage} />
         </Switch>
       </Layout>
     )

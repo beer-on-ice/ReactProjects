@@ -13,7 +13,6 @@ class Product {
       url = '/manage/product/search.do'
       data.pageNum = listParam.pageNum
       data[listParam.searchType] = listParam.keyword
-      console.log(listParam)
     }
     return _mm.request({
       type: 'post',
