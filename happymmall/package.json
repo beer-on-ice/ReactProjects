@@ -2,7 +2,7 @@
   "scripts": {
     "clean": "rimraf dist && rimraf ./dist",
     "dev": "webpack-dev-server --open",
-    "build": "yarn run clean && node_modules/.bin/webpack"
+    "build": "yarn run clean && set WEBPACK_ENV=online&& node_modules/.bin/webpack"
   },
   "devDependencies": {
     "babel-core": "6.26.0",
