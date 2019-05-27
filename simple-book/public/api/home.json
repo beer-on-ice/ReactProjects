@@ -1,0 +1,57 @@
+{
+  "success": true,
+  "data": {
+    "topicList": [
+      {
+        "id": 1,
+        "title": "社会热点",
+        "imgUrl": " //upload.jianshu.io/users/upload_avatars/2587459/0c7e061f-e78e-4b09-b511-340846c4ea0f.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/96/h/96/format/webp"
+      },
+      {
+        "id": 2,
+        "title": "科技要闻",
+        "imgUrl": " //upload.jianshu.io/users/upload_avatars/2587459/0c7e061f-e78e-4b09-b511-340846c4ea0f.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/96/h/96/format/webp"
+      }
+    ],
+    "articleList": [
+      {
+        "id": 1,
+        "title": "谈谈大学生的坚持",
+        "desc": "大学生现状之坚持的对象 现状大学生分类大致为 1.学霸类，每天是宿舍第一个起床的人，每节课都必须到，在每个老师的眼里都是将来国家的栋梁。 2.学...",
+        "imgUrl": " //upload-images.jianshu.io/upload_images/16404613-6c17e7ab27c9278b.jpeg?imageMogr2/auto-orient/strip|imageView2/1/w/360/h/240"
+      },
+      {
+        "id": 2,
+        "title": "谈谈大学生的坚持",
+        "desc": "大学生现状之坚持的对象 现状大学生分类大致为 1.学霸类，每天是宿舍第一个起床的人，每节课都必须到，在每个老师的眼里都是将来国家的栋梁。 2.学...",
+        "imgUrl": " //upload-images.jianshu.io/upload_images/16404613-6c17e7ab27c9278b.jpeg?imageMogr2/auto-orient/strip|imageView2/1/w/360/h/240"
+      }
+    ],
+    "RecommendList": [
+      {
+        "id": 1,
+        "imgUrl": "https://cdn2.jianshu.io/assets/web/banner-s-club-aa8bdf19f8cf729a759da42e4a96f366.png"
+      },
+      {
+        "id": 2,
+        "imgUrl": "https://cdn2.jianshu.io/assets/web/banner-s-3-ddcc844ebdd8edca2d93b7ea5a8de79e.png"
+      },
+      {
+        "id": 3,
+        "imgUrl": "https://cdn2.jianshu.io/assets/web/banner-s-4-b70da70d679593510ac93a172dfbaeaa.png"
+      },
+      {
+        "id": 4,
+        "imgUrl": "https://cdn2.jianshu.io/assets/web/banner-s-7-1a0222c91694a1f38e610be4bf9669be.png"
+      },
+      {
+        "id": 5,
+        "imgUrl": "https://cdn2.jianshu.io/assets/web/banner-s-5-4ba25cf5041931a0ed2062828b4064cb.png"
+      },
+      {
+        "id": 6,
+        "imgUrl": "https://cdn2.jianshu.io/assets/web/banner-s-6-c4d6335bfd688f2ca1115b42b04c28a7.png"
+      }
+    ]
+  }
+}
