@@ -1,116 +1,117 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react'
-import {
-  createSet,
-  createAdd,
-  createRemove,
-  createToggle
-} from './Actions'
-
+import { createSet, createAdd, createRemove, createToggle } from './Actions'
+import { tsConstructSignatureDeclaration } from 'C:/Users/li997/AppData/Local/Microsoft/TypeScript/3.6/node_modules/@babel/types/lib'
 
 let idSeq = Date.now()
 
-
 const Operator = props => {
-  const {addTodo} = props
-  const inputRef = useRef()
+	const { addTodo } = props
+	const inputRef = useRef()
 
-  const onSubmit = (e) => {
-    e.preventDefault()
-    const newText = inputRef.current.value.trim()
-    if(newText.length === 0) return 
-    addTodo({
-      id: ++idSeq,
-      text:newText,
-      complete:false
-    })
-    inputRef.current.value = ''
-  }
+	const onSubmit = e => {
+		e.preventDefault()
+		const newText = inputRef.current.value.trim()
+		if (newText.length === 0) return
+		addTodo({
+			id: ++idSeq,
+			text: newText,
+			complete: false,
+		})
+		inputRef.current.value = ''
+	}
 
-  return (
-    <div className="operator">
-      <form onSubmit={onSubmit}>
-        <input type="text" placeholder="what needs to be done?" ref={inputRef}/>
-      </form>
-    </div>
-  )
+	return (
+		<div className="operator">
+			<form onSubmit={onSubmit}>
+				<input
+					type="text"
+					placeholder="what needs to be done?"
+					ref={inputRef}
+				/>
+			</form>
+		</div>
+	)
 }
 
 const TodoItem = props => {
-  const {
-    todo:{
-      id,
-      text,
-      complete
-    },
-    removeTodo,
-    toggleTodo
-  } = props
+	const {
+		todo: { id, text, complete },
+		removeTodo,
+		toggleTodo,
+	} = props
 
-  const onRemove = () => {
-    removeTodo(id)
-  }
-  
-  const onChange = () => {
-    toggleTodo(id)
-  }
+	const onRemove = () => {
+		removeTodo(id)
+	}
 
-  return (
-    <li className="todo-item">
-      <input type="checkbox" onChange={onChange} checked={complete}/>
-      <label>{text}</label>
-      <button onClick={onRemove}>Delete</button>
-    </li>
-  )
+	const onChange = () => {
+		toggleTodo(id)
+	}
+
+	return (
+		<li className="todo-item">
+			<input type="checkbox" onChange={onChange} checked={complete} />
+			<label>{text}</label>
+			<button onClick={onRemove}>Delete</button>
+		</li>
+	)
 }
 
 const TodoList = props => {
-  const {
-    todos,
-    removeTodo,
-    toggleTodo
-  } = props
-  
-  return (
-    <ul>
-      {
-        todos.map(todo=> <TodoItem key={todo.id} todo={todo} removeTodo={removeTodo} toggleTodo={toggleTodo}/> )
-      }
-    </ul>
-  )
+	const { todos, removeTodo, toggleTodo } = props
+
+	return (
+		<ul>
+			{todos.map(todo => (
+				<TodoItem
+					key={todo.id}
+					todo={todo}
+					removeTodo={removeTodo}
+					toggleTodo={toggleTodo}  
+				/>
+			))}
+		</ul>
+	)
 }
 
 const App = props => {
-  const [todos,setTodo] = useState([])
+	const [todos, setTodo] = useState([])
 
-  const addTodo = useCallback(todo => {
-    setTodo(todos => [...todos,todo])
-  },[])
+	const addTodo = useCallback(todo => {
+		setTodo(todos => [...todos, todo])
+	}, [])
 
-  const removeTodo = useCallback(id => {
-    setTodo(todos => todos.filter(todo => {
-      return todo.id !== id
-    }))
-  },[])
+	const removeTodo = useCallback(id => {
+		setTodo(todos =>
+			todos.filter(todo => {
+				return todo.id !== id
+			})
+		)
+	}, [])
 
-  const toggleTodo = useCallback(id => {
-    setTodo(todos => todos.map(todo => {
-      return todo.id === id ? { ...todo,  complete: !todo.complete } : todo
-    }))
-  },[])
+	const toggleTodo = useCallback(id => {
+		setTodo(todos =>
+			todos.map(todo => {
+				return todo.id === id ? { ...todo, complete: !todo.complete } : todo
+			})
+		)
+	}, [])
 
-  useEffect(()=>{
-    const todos = JSON.parse(localStorage.getItem('haha'))
-    setTodo(todos)
-  },[])
+	useEffect(() => {
+		const todos = JSON.parse(localStorage.getItem('haha'))
+		setTodo(todos)
+	}, [])
 
-  useEffect(()=>{localStorage.setItem('haha',JSON.stringify(todos))},[todos])
+	useEffect(() => {
+		localStorage.setItem('haha', JSON.stringify(todos))
+	}, [todos])
 
-  return (
-    <div className="todo-list">
-      <Operator addTodo={addTodo}/>
-      <TodoList removeTodo={removeTodo} toggleTodo={toggleTodo} todos={todos}/>
-    </div>
-  )
+	return (
+		<div className="todo-list">
+			<Operator addTodo={addTodo} />
+			<TodoList removeTodo={removeTodo} toggleTodo={toggleTodo} todos={todos} />
+		</div>
+	)
 }
 
 export default App
