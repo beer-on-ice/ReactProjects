@@ -1,4 +1,0 @@
-diff a/train-ticket/src/ticket/reducers.js b/train-ticket/src/ticket/reducers.js	(rejected hunks)
-@@ -1 +1 @@
--export default {}
-+export default {};
