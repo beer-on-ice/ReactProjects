@@ -70,9 +70,11 @@
 		"format": "prettier src/**/*.{js,jsx,css,md} --write && eslint src/**/*.{jsx,js} --fix"
 	},
 	"eslintConfig": {
-		"extends": ["plugin:prettier/recommended"],
+		"extends": ["prettier/react", "plugin:prettier/recommended"],
+		"plugins": ["react-hooks", "prettier"],
 		"rules": {
-			"react/jsx-indent": ["error", 4]
+			"react-hooks/rules-of-hooks": "error",
+			"prettier/prettier": "error"
 		}
 	},
 	"husky": {
@@ -81,7 +83,7 @@
 		}
 	},
 	"lint-staged": {
-		"*.{js,jsx}": ["prettier --write", "eslint --fix", "git add"],
+		"*.{js,jsx}": ["eslint --fix", "prettier --write", "git add"],
 		"*.{css,md}": ["prettier --write", "git add"]
 	},
 	"browserslist": {
@@ -138,6 +140,8 @@
 		"presets": ["react-app"]
 	},
 	"devDependencies": {
+		"eslint-config-prettier": "^6.5.0",
+		"eslint-plugin-prettier": "^3.1.1",
 		"husky": "^3.0.9",
 		"lint-staged": "^9.4.2",
 		"prettier": "^1.18.2",
