@@ -1,6 +1,6 @@
-import React from "react";
-import "./index.css";
+import React from 'react'
+import './index.css'
 
 export default function Jounery() {
-  return <div></div>;
+	return <div></div>
 }
