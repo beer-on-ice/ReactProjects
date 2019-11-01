@@ -1,0 +1,18 @@
+diff a/train-ticket/src/index/store.js b/train-ticket/src/index/store.js	(rejected hunks)
+@@ -1,2 +1,2 @@
+-import { createStore, combineReducers, applyMiddleware } from 'redux'
+-import thunk from 'redux-thunk'
++import { createStore, combineReducers, applyMiddleware } from "redux";
++import thunk from "redux-thunk";
+@@ -4 +4 @@ import thunk from 'redux-thunk'
+-import reducers from './reducers'
++import reducers from "./reducers";
+@@ -7,4 +7,4 @@ export default createStore(
+-	combineReducers(reducers),
+-	{},
+-	applyMiddleware(thunk)
+-)
++  combineReducers(reducers),
++  {},
++  applyMiddleware(thunk)
++);
