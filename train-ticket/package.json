@@ -70,7 +70,7 @@
 		"format": "prettier src/**/*.{js,jsx,css,md} --write && eslint src/**/*.{jsx,js} --fix"
 	},
 	"eslintConfig": {
-		"extends": ["prettier/react", "plugin:prettier/recommended"],
+		"extends": ["prettier/react"],
 		"plugins": ["react-hooks", "prettier"],
 		"rules": {
 			"react-hooks/rules-of-hooks": "error",
