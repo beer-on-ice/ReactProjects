@@ -1,0 +1,4 @@
+diff a/train-ticket/src/order/actions.js b/train-ticket/src/order/actions.js	(rejected hunks)
+@@ -1 +1 @@
+-export default {}
++export default {};

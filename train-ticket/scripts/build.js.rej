@@ -1,0 +1,117 @@
+diff a/train-ticket/scripts/build.js b/train-ticket/scripts/build.js	(rejected hunks)
+@@ -1 +1 @@
+-'use strict';
++
+@@ -4,2 +4,2 @@
+-process.env.BABEL_ENV = 'production';
+-process.env.NODE_ENV = 'production';
++process.env.BABEL_ENV = "production";
++process.env.NODE_ENV = "production";
+@@ -10 +10 @@ process.env.NODE_ENV = 'production';
+-process.on('unhandledRejection', err => {
++process.on("unhandledRejection", err => {
+@@ -15,14 +15,13 @@ process.on('unhandledRejection', err => {
+-require('../config/env');
+-
+-
+-const path = require('path');
+-const chalk = require('react-dev-utils/chalk');
+-const fs = require('fs-extra');
+-const webpack = require('webpack');
+-const configFactory = require('../config/webpack.config');
+-const paths = require('../config/paths');
+-const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
+-const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
+-const printHostingInstructions = require('react-dev-utils/printHostingInstructions');
+-const FileSizeReporter = require('react-dev-utils/FileSizeReporter');
+-const printBuildError = require('react-dev-utils/printBuildError');
++require("../config/env");
++
++const path = require("path");
++const chalk = require("react-dev-utils/chalk");
++const fs = require("fs-extra");
++const webpack = require("webpack");
++const configFactory = require("../config/webpack.config");
++const paths = require("../config/paths");
++const checkRequiredFiles = require("react-dev-utils/checkRequiredFiles");
++const formatWebpackMessages = require("react-dev-utils/formatWebpackMessages");
++const printHostingInstructions = require("react-dev-utils/printHostingInstructions");
++const FileSizeReporter = require("react-dev-utils/FileSizeReporter");
++const printBuildError = require("react-dev-utils/printBuildError");
+@@ -47 +46 @@ if (!checkRequiredFiles([paths.appIndexHtml, paths.appIndexJs])) {
+-const config = configFactory('production');
++const config = configFactory("production");
+@@ -51 +50 @@ const config = configFactory('production');
+-const { checkBrowsers } = require('react-dev-utils/browsersHelper');
++const { checkBrowsers } = require("react-dev-utils/browsersHelper");
+@@ -70,2 +69,2 @@ checkBrowsers(paths.appPath, isInteractive)
+-        console.log(chalk.yellow('Compiled with warnings.\n'));
+-        console.log(warnings.join('\n\n'));
++        console.log(chalk.yellow("Compiled with warnings.\n"));
++        console.log(warnings.join("\n\n"));
+@@ -73,3 +72,3 @@ checkBrowsers(paths.appPath, isInteractive)
+-          '\nSearch for the ' +
+-            chalk.underline(chalk.yellow('keywords')) +
+-            ' to learn more about each warning.'
++          "\nSearch for the " +
++            chalk.underline(chalk.yellow("keywords")) +
++            " to learn more about each warning."
+@@ -78,3 +77,3 @@ checkBrowsers(paths.appPath, isInteractive)
+-          'To ignore, add ' +
+-            chalk.cyan('// eslint-disable-next-line') +
+-            ' to the line before.\n'
++          "To ignore, add " +
++            chalk.cyan("// eslint-disable-next-line") +
++            " to the line before.\n"
+@@ -83 +82 @@ checkBrowsers(paths.appPath, isInteractive)
+-        console.log(chalk.green('Compiled successfully.\n'));
++        console.log(chalk.green("Compiled successfully.\n"));
+@@ -86 +85 @@ checkBrowsers(paths.appPath, isInteractive)
+-      console.log('File sizes after gzip:\n');
++      console.log("File sizes after gzip:\n");
+@@ -109 +108 @@ checkBrowsers(paths.appPath, isInteractive)
+-      const tscCompileOnError = process.env.TSC_COMPILE_ON_ERROR === 'true';
++      const tscCompileOnError = process.env.TSC_COMPILE_ON_ERROR === "true";
+@@ -111,3 +110,5 @@ checkBrowsers(paths.appPath, isInteractive)
+-        console.log(chalk.yellow(
+-          'Compiled with the following type errors (you may want to check these before deploying your app):\n'
+-        ));
++        console.log(
++          chalk.yellow(
++            "Compiled with the following type errors (you may want to check these before deploying your app):\n"
++          )
++        );
+@@ -116 +117 @@ checkBrowsers(paths.appPath, isInteractive)
+-        console.log(chalk.red('Failed to compile.\n'));
++        console.log(chalk.red("Failed to compile.\n"));
+@@ -137 +138 @@ function build(previousFileSizes) {
+-        'Setting NODE_PATH to resolve modules absolutely has been deprecated in favor of setting baseUrl in jsconfig.json (or tsconfig.json if you are using TypeScript) and will be removed in a future major release of create-react-app.'
++        "Setting NODE_PATH to resolve modules absolutely has been deprecated in favor of setting baseUrl in jsconfig.json (or tsconfig.json if you are using TypeScript) and will be removed in a future major release of create-react-app."
+@@ -143 +144 @@ function build(previousFileSizes) {
+-  console.log('Creating an optimized production build...');
++  console.log("Creating an optimized production build...");
+@@ -155 +156 @@ function build(previousFileSizes) {
+-          warnings: [],
++          warnings: []
+@@ -168 +169 @@ function build(previousFileSizes) {
+-        return reject(new Error(messages.errors.join('\n\n')));
++        return reject(new Error(messages.errors.join("\n\n")));
+@@ -172,2 +173,2 @@ function build(previousFileSizes) {
+-        (typeof process.env.CI !== 'string' ||
+-          process.env.CI.toLowerCase() !== 'false') &&
++        (typeof process.env.CI !== "string" ||
++          process.env.CI.toLowerCase() !== "false") &&
+@@ -178,2 +179,2 @@ function build(previousFileSizes) {
+-            '\nTreating warnings as errors because process.env.CI = true.\n' +
+-              'Most CI servers set it automatically.\n'
++            "\nTreating warnings as errors because process.env.CI = true.\n" +
++              "Most CI servers set it automatically.\n"
+@@ -182 +183 @@ function build(previousFileSizes) {
+-        return reject(new Error(messages.warnings.join('\n\n')));
++        return reject(new Error(messages.warnings.join("\n\n")));
+@@ -188 +189 @@ function build(previousFileSizes) {
+-        warnings: messages.warnings,
++        warnings: messages.warnings
+@@ -197 +198 @@ function copyPublicFolder() {
+-    filter: file => file !== paths.appIndexHtml,
++    filter: file => file !== paths.appIndexHtml

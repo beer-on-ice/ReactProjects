@@ -1,0 +1,13 @@
+diff a/train-ticket/src/index/DepartDate/index.jsx b/train-ticket/src/index/DepartDate/index.jsx	(rejected hunks)
+@@ -1,2 +1,2 @@
+-import React from 'react'
+-import './index.css'
++import React from "react";
++import "./index.css";
+@@ -5,5 +5 @@ export default function DepartDate() {
+-  return (
+-    <div>
+-      
+-    </div>
+-  )
++  return <div></div>;
