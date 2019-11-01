@@ -69,31 +69,6 @@
 		"test": "node scripts/test.js",
 		"format": "prettier src/**/*.{js,jsx,css,md} --write && eslint src/**/*.{jsx,js} --fix"
 	},
-	"eslintConfig": {
-		"extends": ["prettier", "prettier/react", "plugin:prettier/recommended"],
-		"plugins": ["react-hooks", "prettier"],
-		"parser": "babel-eslint",
-
-		"env": {
-			"es6": true,
-			"node": true
-		},
-		"rules": {
-			"react-hooks/rules-of-hooks": "error",
-			"prettier/prettier": [
-				"error",
-				{
-					"singleQuote": true,
-					"semi": false,
-					"tabWidth": 2,
-					"useTabs": true,
-					"jsxSingleQuote": true,
-					"jsxBracketSameLine": false,
-					"trailingComma": "es5"
-				}
-			]
-		}
-	},
 	"husky": {
 		"hooks": {
 			"pre-commit": "lint-staged"
