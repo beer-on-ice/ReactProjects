@@ -14,7 +14,9 @@
 		"babel-preset-react-app": "^9.0.2",
 		"camelcase": "^5.2.0",
 		"case-sensitive-paths-webpack-plugin": "2.2.0",
+		"classnames": "^2.2.6",
 		"css-loader": "2.1.1",
+		"dayjs": "^1.8.17",
 		"dotenv": "6.2.0",
 		"dotenv-expand": "5.1.0",
 		"eslint": "^6.1.0",
@@ -43,6 +45,7 @@
 		"postcss-normalize": "7.0.1",
 		"postcss-preset-env": "6.7.0",
 		"postcss-safe-parser": "4.0.1",
+		"prop-types": "^15.7.2",
 		"react": "^16.10.2",
 		"react-app-polyfill": "^1.0.4",
 		"react-dev-utils": "^9.1.0",
@@ -75,22 +78,40 @@
 		}
 	},
 	"lint-staged": {
-		"*.{js,jsx}": ["prettier --write", "eslint --fix", "git add"],
-		"*.{css,md}": ["prettier --write", "git add"]
+		"*.{js,jsx}": [
+			"prettier --write",
+			"eslint --fix",
+			"git add"
+		],
+		"*.{css,md}": [
+			"prettier --write",
+			"git add"
+		]
 	},
 	"browserslist": {
-		"production": [">0.2%", "not dead", "not op_mini all"],
+		"production": [
+			">0.2%",
+			"not dead",
+			"not op_mini all"
+		],
 		"development": [
 			"last 1 chrome version",
 			"last 1 firefox version",
 			"last 1 safari version"
 		]
 	},
-	"proxy": "https://localhost:5000",
+	"proxy": "http://192.168.0.113:5000",
 	"jest": {
-		"roots": ["<rootDir>/src"],
-		"collectCoverageFrom": ["src/**/*.{js,jsx,ts,tsx}", "!src/**/*.d.ts"],
-		"setupFiles": ["react-app-polyfill/jsdom"],
+		"roots": [
+			"<rootDir>/src"
+		],
+		"collectCoverageFrom": [
+			"src/**/*.{js,jsx,ts,tsx}",
+			"!src/**/*.d.ts"
+		],
+		"setupFiles": [
+			"react-app-polyfill/jsdom"
+		],
 		"setupFilesAfterEnv": [],
 		"testMatch": [
 			"<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",
@@ -129,7 +150,9 @@
 		]
 	},
 	"babel": {
-		"presets": ["react-app"]
+		"presets": [
+			"react-app"
+		]
 	},
 	"devDependencies": {
 		"eslint-config-prettier": "^6.5.0",
