@@ -7,6 +7,7 @@ import {
 	ACTION_SET_IS_LOADING_CITY_DATA,
 	ACTION_SET_IS_DATE_SELECTOR_VISIBLE,
 	ACTION_SET_HIGH_SPEED,
+	ACTION_SET_DEPART_DATE,
 } from './actionTypes'
 
 const defaultState = {
@@ -61,6 +62,11 @@ const highSpeed = (state, action) => {
 	return { ...state, highSpeed: payload }
 }
 
+const departDate = (state, action) => {
+	const { payload } = action
+	return { ...state, departDate: payload }
+}
+
 export default (state = defaultState, action) => {
 	switch (action.type) {
 		case ACTION_SET_FROM:
@@ -79,6 +85,8 @@ export default (state = defaultState, action) => {
 			return isDateSelectorVisible(state, action)
 		case ACTION_SET_HIGH_SPEED:
 			return highSpeed(state, action)
+		case ACTION_SET_DEPART_DATE:
+			return departDate(state, action)
 		default:
 			return state
 	}

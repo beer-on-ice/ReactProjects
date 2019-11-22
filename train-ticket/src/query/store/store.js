@@ -4,7 +4,8 @@ import thunk from 'redux-thunk'
 import reducers from './reducers'
 
 export default createStore(
-	combineReducers(reducers),
-	{},
+	combineReducers({
+		query: reducers,
+	}),
 	applyMiddleware(thunk)
 )

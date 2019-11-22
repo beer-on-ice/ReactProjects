@@ -92,7 +92,7 @@ export function showDateSelector() {
 export function hideDateSelector() {
 	return dispatch => {
 		dispatch({
-			type: actionTypes.ACTION_SET_IS_CITY_SELECTOR_VISIBLE,
+			type: actionTypes.ACTION_SET_IS_DATE_SELECTOR_VISIBLE,
 			payload: false,
 		})
 	}
@@ -106,6 +106,12 @@ export function exchangeFromTo() {
 
 		dispatch(setFrom(to))
 		dispatch(setTo(from))
+	}
+}
+export function setDepartDate(date) {
+	return {
+		type: actionTypes.ACTION_SET_DEPART_DATE,
+		payload: date,
 	}
 }
 

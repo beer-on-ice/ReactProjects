@@ -6,11 +6,14 @@ import './App.css'
 
 import Header from 'common/Header'
 import CitySelector from 'common/CitySelector'
+import DateSelector from 'common/DateSelector'
 
 import DepartDate from './DepartDate'
 import HighSpeed from './HighSpeed'
 import Journey from './Journey'
 import Submit from './Submit'
+
+import { h0 } from 'common/util/fp'
 
 import {
 	exchangeFromTo,
@@ -19,6 +22,9 @@ import {
 	fetchCityData,
 	setSelectCity,
 	showDateSelector,
+	hideDateSelector,
+	setDepartDate,
+	toggleHighSpeed,
 } from './store/actionCreators'
 
 const App = props => {
@@ -27,9 +33,11 @@ const App = props => {
 			from,
 			to,
 			isCitySelectorVisible,
+			isDateSelectorVisible,
 			cityData,
 			isLoadingCityData,
 			departDate,
+			highSpeed,
 		},
 		dispatch,
 	} = { ...props }
@@ -59,6 +67,15 @@ const App = props => {
 		)
 	}, [])
 
+	const dateSelectorCbs = useMemo(() => {
+		return bindActionCreators(
+			{
+				onBack: hideDateSelector,
+			},
+			dispatch
+		)
+	}, [])
+
 	const departDateCbs = useMemo(() => {
 		return bindActionCreators(
 			{
@@ -68,15 +85,32 @@ const App = props => {
 		)
 	}, [])
 
+	const highSpeedCbs = useMemo(() => {
+		return bindActionCreators(
+			{
+				toggle: toggleHighSpeed,
+			},
+			dispatch
+		)
+	}, [])
+
+	const onSelectDate = useCallback(day => {
+		if (!day) return
+		if (day < h0()) return
+
+		dispatch(setDepartDate(day))
+		dispatch(hideDateSelector())
+	}, [])
+
 	return (
 		<div>
 			<div className='header-wrapper'>
 				<Header title='火车票' onBack={onBack}></Header>
 			</div>
-			<form action='' className='form'>
+			<form action='./query.html' className='form'>
 				<Journey from={from} to={to} {...cbs}></Journey>
 				<DepartDate time={departDate} {...departDateCbs}></DepartDate>
-				<HighSpeed></HighSpeed>
+				<HighSpeed highSpeed={highSpeed} {...highSpeedCbs}></HighSpeed>
 				<Submit></Submit>
 			</form>
 			<CitySelector
@@ -85,6 +119,11 @@ const App = props => {
 				isLoading={isLoadingCityData}
 				{...citySelectorCbs}
 			></CitySelector>
+			<DateSelector
+				show={isDateSelectorVisible}
+				onSelect={onSelectDate}
+				{...dateSelectorCbs}
+			></DateSelector>
 		</div>
 	)
 }
