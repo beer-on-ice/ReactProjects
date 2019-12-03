@@ -27,6 +27,11 @@ import {
 	toggleHighSpeed,
 } from './store/actionCreators'
 
+/*
+ * useMemo返回缓存的变量，useCallback返回缓存的函数
+ * useCallback(fn,deps) === useMemo(()=>fn,deps)
+ */
+
 const App = props => {
 	const {
 		home: {
@@ -42,6 +47,7 @@ const App = props => {
 		dispatch,
 	} = { ...props }
 
+	// useCallback Hook, 用来‘缓存’函数, 保持回调的不变性
 	const onBack = useCallback(() => {
 		window.history.back()
 	}, [])
@@ -128,12 +134,8 @@ const App = props => {
 	)
 }
 
-const mapStateToProps = state => {
-	return state
-}
-const mapDispatchToProps = dispatch => {
-	return { dispatch }
-}
+const mapStateToProps = state => state // store里面的state
+const mapDispatchToProps = dispatch => ({ dispatch })
 
 export default connect(
 	mapStateToProps,
